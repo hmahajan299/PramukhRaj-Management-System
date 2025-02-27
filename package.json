@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "@firebasegen/default-connector": "file:dataconnect-generated/js/default-connector",
+    "firebase": "^11.2.0",
+    "fontkit": "^2.0.4"
+  },
+  "devDependencies": {
+    "pdf-lib": "^1.17.1",
+    "webpack": "^5.97.1",
+    "webpack-cli": "^6.0.1"
+  }
+}

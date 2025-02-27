@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Features - Pramukhraj Electricals</title>
+    <style>
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        /* Header Styling */
+        header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #ff5722;
+            text-decoration: none;
+            background: linear-gradient(45deg, #ff5722, #ff8a50);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Enhanced Button Design */
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-outline {
+            background: white;
+            color: #333;
+            border: 2px solid #ddd;
+        }
+
+        .btn-outline:hover {
+            border-color: #ff5722;
+            color: #ff5722;
+        }
+        
+        /* Feature Page Styles */
+        .feature-hero {
+            padding: 140px 0 60px;
+            background: linear-gradient(135deg, #fff5f2 0%, #ffffff 100%);
+            text-align: center;
+            border-bottom: 1px solid #ffeee8;
+        }
+
+        .feature-hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ff5722, #ff8a65);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .feature-details {
+            padding: 60px 0;
+            background: #f8f9fa;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-radius: 12px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255,87,34,0.1);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: #ff5722;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-card h3 {
+            color: #2d3436;
+            margin-bottom: 15px;
+            font-size: 1.6rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .feature-card h3::before {
+            content: '✓';
+            color: #ff5722;
+            font-weight: bold;
+            font-size: 1.8rem;
+        }
+
+        /* Enhanced List Styling */
+        .feature-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .feature-card li {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 1rem;
+            color: #444;
+        }
+
+        .feature-card li::before {
+            content: '✓';
+            color: #ff5722;
+            position: absolute;
+            left: 0;
+            top: -1px;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .highlight {
+            background: #fff3e0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            border-left: 4px solid #ff5722;
+        }
+
+        .highlight strong {
+            color: #ff5722;
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        footer {
+            background: white;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            border-top: 1px solid #eee;
+        }
+
+        @media (max-width: 768px) {
+            .feature-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .feature-card {
+                padding: 25px;
+            }
+            
+            .feature-card h3 {
+                font-size: 1.4rem;
+            }
+
+            nav {
+                padding: 0 1rem;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html" class="logo">Pramukhraj Electricals</a>
+            <div class="nav-links">
+                <a href="login.html" class="btn btn-outline">Sign In</a>
+                <a href="index.html" class="btn btn-outline">Home</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="feature-hero">
+            <div class="container">
+                <h1>Powerful Features for Your Business</h1>
+                <p class="hero-subtitle">Essential tools for modern electrical service management</p>
+            </div>
+        </section>
+
+        <section class="feature-details">
+            <div class="container">
+                <!-- Staff Attendance Tracking -->
+                <div class="feature-card">
+                    <h3>Staff Attendance Tracking by Site</h3>
+                    <div class="highlight">
+                        <strong>Why It Matters:</strong>
+                        Eliminate manual tracking errors and ensure accurate payroll processing
+                    </div>
+                    <ul>
+                        <li>Real-time GPS-based location tracking</li>
+                        <li>Automated shift scheduling</li>
+                        <li>Overtime calculation automation</li>
+                        <li>Multi-site workforce management</li>
+                    </ul>
+                </div>
+
+                <!-- Financial Management -->
+                <div class="feature-card">
+                    <h3>Financial Management System</h3>
+                    <div class="highlight">
+                        <strong>Key Benefit:</strong>
+                        Maintain complete financial visibility across all projects
+                    </div>
+                    <ul>
+                        <li>Automated expense categorization</li>
+                        <li>Real-time cash flow monitoring</li>
+                        <li>Tax-ready financial reports</li>
+                        <li>Multi-currency support</li>
+                    </ul>
+                </div>
+
+                <!-- Digital Visiting Cards -->
+                <div class="feature-card">
+                    <h3>Digital Visiting Cards</h3>
+                    <div class="highlight">
+                        <strong>Advantage:</strong>
+                        Instant professional networking with zero printing costs
+                    </div>
+                    <ul>
+                        <li>QR-code based sharing</li>
+                        <li>Dynamic content updates</li>
+                        <li>Client interaction analytics</li>
+                        <li>Integrated service portfolio</li>
+                    </ul>
+                </div>
+
+                <!-- Site Progress Media -->
+                <div class="feature-card">
+                    <h3>Site Progress Photo/Video Upload</h3>
+                    <div class="highlight">
+                        <strong>Critical For:</strong>
+                        Transparent client communication and project documentation
+                    </div>
+                    <ul>
+                        <li>Cloud-based media storage</li>
+                        <li>Automatic progress timelines</li>
+                        <li>Client approval workflows</li>
+                        <li>Version control for revisions</li>
+                    </ul>
+                </div>
+
+                <!-- Task Management -->
+                <div class="feature-card">
+                    <h3>Real-time Task Management</h3>
+                    <div class="highlight">
+                        <strong>Essential For:</strong>
+                        Maintaining project timelines and team accountability
+                    </div>
+                    <ul>
+                        <li>Visual workflow dashboards</li>
+                        <li>Automated deadline reminders</li>
+                        <li>Priority task tagging</li>
+                        <li>Cross-team collaboration</li>
+                    </ul>
+                </div>
+
+                <!-- Communication -->
+                <div class="feature-card">
+                    <h3>Instant Communication via WhatsApp/Telegram</h3>
+                    <div class="highlight">
+                        <strong>Key Feature:</strong>
+                        Reduce response time and improve team coordination
+                    </div>
+                    <ul>
+                        <li>Broadcast important updates</li>
+                        <li>File/document sharing</li>
+                        <li>Client communication logs</li>
+                        <li>Automated message templates</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; <span id="year"></span> Pramukhraj Electricals. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Copyright year update
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

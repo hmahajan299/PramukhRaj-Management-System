@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attendance Management</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Base Reset & Variables */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+    }
+    :root {
+      --primary-color: #ff5722;
+      --secondary-color: #FFC107;
+      --danger-color: #F44336;
+      --success-color: #4CAF50;
+      --background-color: #F5F5F5;
+      --text-color: #333;
+      --border-color: #ddd;
+    }
+
+    /* Global Styles */
+    body {
+      background-color: var(--background-color);
+      min-height: 100vh;
+    }
+
+    /* Header */
+    header {
+      background: #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 100;
+    }
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+    }
+    .header-title {
+      font-size: 24px;
+      color: var(--primary-color);
+      font-weight: 600;
+    }
+
+    /* Main Content */
+    main {
+      margin-top: 80px;
+      padding: 20px;
+    }
+
+    /* Calendar Styles */
+    .calendar-container {
+      width: 100%;
+      max-width: 380px;
+      margin: 0 auto;
+      background: var(--background-color);
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.08);
+      padding: 10px;
+    }
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .monthYear {
+      text-align: center;
+      font-weight: 600;
+      width: 150px;
+    }
+    .calendar-nav {
+      padding: 8px 16px;
+      background: var(--primary-color);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .calendar-nav:hover {
+      transform: scale(1.1);
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+    }
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+    }
+    .date {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .date:hover,
+    .date:active {
+      background: var(--primary-color);
+      color: var(--background-color);
+    }
+    .date.active {
+      background-color: var(--primary-color);
+      color: #fff;
+      font-weight: bold;
+    }
+    .date.inactive {
+      color: #d2d2d2;
+    }
+    .selected {
+      border: 3px solid #000;
+    }
+
+    /* Selected Date Display */
+    #selectedDate {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      font-size: 18px;
+      color: var(--text-color);
+      padding: 10px;
+      background-color: var(--background-color);
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      z-index: 1000;
+    }
+
+    /* Attendance Container */
+    .attendance-container {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      padding: 30px;
+      margin-top: 30px;
+    }
+    .attendance-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    .attendance-table th,
+    .attendance-table td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .attendance-table th {
+      background-color: var(--primary-color);
+      color: #fff;
+    }
+
+    /* Button Styles */
+    .status-btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin: 2px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .status-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+    }
+    .status-btn:active {
+      transform: scale(0.95);
+    }
+    .status-btn.marked {
+      border: 2px solid #333;
+      box-shadow: 0px 0px 10px rgba(0,0,0,0.5);
+    }
+    .present {
+      background-color: var(--success-color);
+      color: #fff;
+    }
+    .absent {
+      background-color: var(--danger-color);
+      color: #fff;
+    }
+    .absent:hover {
+      background-color: #e74c3c;
+    }
+    .half-day {
+      background-color: var(--secondary-color);
+      color: #000;
+    }
+    .half-day:hover {
+      background-color: #ff9900;
+    }
+    .pdf-btn {
+      background: none;
+      border: none;
+      color: var(--primary-color);
+      font-size: 18px;
+      cursor: pointer;
+      padding: 5px;
+      transition: color 0.3s ease, transform 0.3s ease;
+    }
+    .pdf-btn:hover {
+      color: var(--secondary-color);
+      transform: scale(1.2);
+    }
+
+    /* Confirmation Dialog */
+    #confirm-dialog {
+      position: fixed;
+      top: 80px;
+      left: 0;
+      width: 100%;
+      height: calc(100% - 80px);
+      background-color: rgba(0,0,0,0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 0.3s ease forwards;
+    }
+    .dialog-box {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    .dialog-box h2 {
+      margin-top: 0;
+    }
+    .dialog-box p {
+      margin-bottom: 20px;
+    }
+    #confirm-yes,
+    #confirm-no {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #confirm-yes {
+      background-color: var(--success-color);
+      color: #fff;
+      margin-right: 10px;
+    }
+    #confirm-no {
+      background-color: var(--danger-color);
+      color: #fff;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--text-color);
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 8px;
+      display: none;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    /* Fade-in Animation */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 600px) {
+      .calendar-container,
+      .attendance-container {
+        width: 95%;
+        margin: auto;
+      }
+      header, main {
+        padding: 10px;
+      }
+      .header-title {
+        font-size: 20px;
+      }
+      .date {
+        width: 35px;
+        height: 35px;
+        padding: 8px;
+      }
+      .calendar-nav {
+        padding: 6px 12px;
+      }
+      .attendance-table th,
+      .attendance-table td {
+        padding: 10px;
+        font-size: 14px;
+      }
+      .attendance-container {
+        overflow-x: auto;
+      }
+    }
+    body.dark-mode {
+      --primary-color: #bb86fc;
+      --secondary-color: #3700b3;
+      --background-color: #121212;
+      --card-background: #1e1e1e;
+      --text-color: #e0e0e0;
+      --border-color: #333;
+    }
+    body.dark-mode .attendance-container,
+    body.dark-mode .calendar-container {
+      background-color: var(--card-background);
+      color: var(--text-color);
+    }
+    body.dark-mode .attendance-table th {
+      background-color: var(--secondary-color);
+    }
+    body.dark-mode .pdf-btn {
+      color: var(--primary-color);
+    }
+    body.dark-mode .pdf-btn:hover {
+      color: var(--secondary-color);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <h1 class="header-title">Attendance Management</h1>
+    </div>
+  </header>
+
+  <main>
+    <div class="calendar-container">
+      <div class="calendar-header">
+        <button id="prevBtn" class="calendar-nav">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <div class="monthYear" id="monthYear"></div>
+        <button id="nextBtn" class="calendar-nav">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+      <div class="calendar-grid" id="dates"></div>
+    </div>
+    
+    <p id="selectedDate"></p>
+    
+    <div class="attendance-container">
+      <h2>Staff List</h2>
+      <table class="attendance-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Actions</th>
+            <th>Summary</th>
+          </tr>
+        </thead>
+        <tbody id="staffList"></tbody>
+      </table>
+    </div>
+    
+    <!-- Confirmation Dialog -->
+    <div id="confirm-dialog" class="fade" style="display: none;">
+      <div class="dialog-box">
+        <h2>Confirm Attendance Change</h2>
+        <p id="confirm-message"></p>
+        <button id="confirm-yes">Yes</button>
+        <button id="confirm-no">No</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast"></div>
+
+  <script type="module">
+    import { auth, db, collection, getDocs, doc, setDoc, getDoc } from './firebase.js';
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+
+    const monthYearElement = document.getElementById('monthYear');
+    const datesElement = document.getElementById('dates');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const staffList = document.getElementById('staffList');
+    const toast = document.getElementById('toast');
+    const confirmDialog = document.getElementById('confirm-dialog');
+    const confirmMessage = document.getElementById('confirm-message');
+    const confirmYes = document.getElementById('confirm-yes');
+    const confirmNo = document.getElementById('confirm-no');
+
+    let currentDate = new Date();
+    let selectedDate = new Date();
+    let currentUserEmail = null;
+
+    // Calendar Functions
+    const updateCalendar = () => {
+      const currentYear = currentDate.getFullYear();
+      const currentMonth = currentDate.getMonth();
+      
+      monthYearElement.textContent = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
+      datesElement.innerHTML = '';
+
+      const lastDay = new Date(currentYear, currentMonth + 1, 0);
+      for (let i = 1; i <= lastDay.getDate(); i++) {
+        const date = new Date(currentYear, currentMonth, i);
+        const dateElement = document.createElement('div');
+        dateElement.className = `date ${date.toDateString() === new Date().toDateString() ? 'active' : ''}`;
+        dateElement.textContent = i;
+        dateElement.addEventListener('click', () => selectDate(date, dateElement));
+        datesElement.appendChild(dateElement);
+      }
+    };
+
+    const selectDate = (date, element) => {
+      document.querySelectorAll('.date').forEach(d => d.classList.remove('selected'));
+      element.classList.add('selected');
+      const formattedDate = date.toLocaleDateString('en-GB', {
+        weekday: 'long',
+        day: '2-digit',
+        month: '2-digit',
+        year: '2-digit'
+      });
+      document.getElementById('selectedDate').innerHTML = `<b>: ${formattedDate}</b>`;
+      selectedDate = date;
+      loadAttendanceForDate();
+    };
+
+    prevBtn.addEventListener('click', () => {
+      currentDate.setMonth(currentDate.getMonth() - 1);
+      updateCalendar();
+    });
+
+    nextBtn.addEventListener('click', () => {
+      currentDate.setMonth(currentDate.getMonth() + 1);
+      updateCalendar();
+    });
+
+    // Load Staff List from User's Sub-collection
+    const loadStaffList = async () => {
+      if (!currentUserEmail) {
+        console.error("No user email available yet.");
+        showToast("Please wait, loading user data...");
+        return;
+      }
+
+      try {
+        const staffCollectionRef = collection(db, 'users', currentUserEmail, 'staff');
+        const staffSnapshot = await getDocs(staffCollectionRef);
+        staffList.innerHTML = '';
+
+        if (staffSnapshot.empty) {
+          staffList.innerHTML = '<tr><td colspan="4">No staff found.</td></tr>';
+          return;
+        }
+
+        staffSnapshot.forEach(docSnap => {
+          const staffData = docSnap.data();
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${staffData.name}</td>
+            <td>${staffData.role}</td>
+            <td>
+              ${createAttendanceButton('Present', docSnap.id).outerHTML}
+              ${createAttendanceButton('Absent', docSnap.id).outerHTML}
+              ${createAttendanceButton('Half-Day', docSnap.id).outerHTML}
+            </td>
+            <td>
+              <button class="pdf-btn" data-id="${docSnap.id}" title="View Summary">
+                <i class="fas fa-file-pdf"></i>
+              </button>
+            </td>
+          `;
+          staffList.appendChild(row);
+        });
+
+        addEventListeners();
+        loadAttendanceForDate();
+      } catch (error) {
+        console.error("Error fetching staff:", error);
+        showToast("Failed to load staff list: " + error.message);
+      }
+    };
+
+    const addEventListeners = () => {
+      document.querySelectorAll('.status-btn').forEach(button => {
+        button.addEventListener('click', (e) => {
+          const btn = e.currentTarget;
+          const staffId = btn.dataset.id;
+          const status = btn.dataset.status;
+          markAttendance(staffId, status);
+        });
+      });
+
+      document.querySelectorAll('.pdf-btn').forEach(button => {
+        button.addEventListener('click', (e) => {
+          const staffId = e.currentTarget.dataset.id;
+          window.location.href = `summary.html?staffId=${staffId}`;
+        });
+      });
+    };
+
+    const markAttendance = async (staffId, status) => {
+      if (!currentUserEmail) {
+        console.error("No user email available for attendance marking.");
+        showToast("Please wait, user not fully loaded.");
+        return;
+      }
+
+      try {
+        const dateObj = selectedDate;
+        const formattedDate = `${String(dateObj.getDate()).padStart(2, '0')}-${String(dateObj.getMonth() + 1).padStart(2, '0')}-${dateObj.getFullYear()}`;
+        const attendanceRef = doc(db, 'users', currentUserEmail, 'attendance', staffId, 'records', formattedDate);
+        const attendanceSnapshot = await getDoc(attendanceRef);
+
+        if (attendanceSnapshot.exists()) {
+          const previousStatus = attendanceSnapshot.data().status;
+          if (previousStatus !== status) {
+            confirmMessage.textContent = `Previously marked as "${previousStatus}". Change to "${status}"?`;
+            confirmDialog.style.display = 'flex';
+
+            confirmYes.onclick = async () => {
+              confirmDialog.style.display = 'none';
+              await setDoc(attendanceRef, { date: formattedDate, status }, { merge: true });
+              showToast(`Updated: ${status} on ${formattedDate}`);
+              updateButtonState(staffId, previousStatus, status);
+            };
+
+            confirmNo.onclick = () => {
+              confirmDialog.style.display = 'none';
+              showToast("Attendance update cancelled.");
+            };
+          } else {
+            showToast("No changes made.");
+          }
+        } else {
+          await setDoc(attendanceRef, { date: formattedDate, status }, { merge: true });
+          showToast(`Marked: ${status} on ${formattedDate}`);
+          updateButtonState(staffId, null, status);
+        }
+      } catch (error) {
+        console.error("Error marking attendance:", error);
+        showToast("Failed to mark attendance: " + error.message);
+      }
+    };
+
+    const createAttendanceButton = (status, staffId) => {
+      const button = document.createElement('button');
+      button.classList.add('status-btn', status.toLowerCase());
+      button.dataset.id = staffId;
+      button.dataset.status = status;
+      button.textContent = status;
+      return button;
+    };
+
+    // Update Button State
+    const updateButtonState = (staffId, previousStatus, newStatus) => {
+      if (previousStatus) {
+        document.querySelector(`.status-btn[data-id="${staffId}"][data-status="${previousStatus}"]`)?.classList.remove('marked');
+      }
+      document.querySelector(`.status-btn[data-id="${staffId}"][data-status="${newStatus}"]`)?.classList.add('marked');
+    };
+
+    // Load Attendance for Selected Date
+    const loadAttendanceForDate = async () => {
+      if (!currentUserEmail) return;
+
+      const formattedDate = `${String(selectedDate.getDate()).padStart(2, '0')}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${selectedDate.getFullYear()}`;
+      try {
+        const staffRows = staffList.querySelectorAll('tr');
+        staffRows.forEach(async (row) => {
+          const staffId = row.querySelector('.status-btn').dataset.id;
+          const attendanceRef = doc(db, 'users', currentUserEmail, 'attendance', staffId, 'records', formattedDate);
+          const attendanceSnapshot = await getDoc(attendanceRef);
+
+          row.querySelectorAll('.status-btn').forEach(btn => btn.classList.remove('marked'));
+          if (attendanceSnapshot.exists()) {
+            const status = attendanceSnapshot.data().status;
+            const button = row.querySelector(`.status-btn[data-status="${status}"]`);
+            if (button) button.classList.add('marked');
+          }
+        });
+      } catch (error) {
+        console.error("Error loading attendance for date:", error);
+        showToast("Failed to load attendance data.");
+      }
+    };
+
+    // Theme Handling
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      document.body.classList.add('dark-mode');
+    }
+
+    const showToast = (message) => {
+      toast.textContent = message;
+      toast.style.display = 'block';
+      toast.style.opacity = '1';
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => {
+          toast.style.display = 'none';
+        }, 500);
+      }, 3000);
+    };
+
+    // Authentication and Initialization
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = 'login.html';
+        return;
+      }
+      currentUserEmail = user.email;
+      console.log("User authenticated:", currentUserEmail);
+      updateCalendar();
+      loadStaffList();
+    });
+  </script>
+</body>
+</html>

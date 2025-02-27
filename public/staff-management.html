@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Staff Management Dashboard 🚀💼</title>
+  <!-- Import Google Fonts for a modern look -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    /* ==============================
+       1) Base Reset & Aesthetic Palette
+    =============================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    :root {
+      --saffron-dark: #FF6F00;      /* A deeper saffron shade */
+      --saffron-light: #FFB74D;     /* A lighter saffron accent */
+      --danger-color: #e94e77;      /* For delete/alert buttons */
+      --background-color: #FFF8E1;  /* Soft pastel background */
+      --text-color: #333;
+      --card-background: #ffffff;
+      --border-color: #ffdca8;
+      --hover-color: #fff3e0;
+    }
+    body {
+      background: linear-gradient(135deg, var(--background-color), #fff3e0);
+      color: var(--text-color);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+  
+    /* ==============================
+       2) Header with Subtle Glass & Gradient
+    =============================== */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(90deg, var(--saffron-dark), var(--saffron-light));
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: center;
+      backdrop-filter: blur(6px); /* Glass-like effect */
+    }
+    header nav {
+      width: 100%;
+      max-width: 1300px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #fff;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .logo span {
+      font-size: 1.25rem;
+    }
+  
+    /* "Add Staff" Button for Desktop */
+    /* Default: full text button inside header */
+    #addStaffBtn {
+      display: inline-flex;
+      position: static;
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      background: #fff;
+      color: var(--saffron-dark);
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    #addStaffBtn:hover {
+      background: var(--saffron-dark);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+  
+    /* ==============================
+       3) Main Section
+    =============================== */
+    .staff {
+      padding: 120px 1.5rem 60px; /* Enough space for the fixed header */
+      min-height: 100vh;
+    }
+    .staff h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      color: var(--saffron-dark);
+      text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    }
+  
+    /* ==============================
+       4) Staff Table - Desktop
+    =============================== */
+    .staff-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card-background);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      margin: 2rem 0;
+    }
+    .staff-table th,
+    .staff-table td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .staff-table th {
+      background: var(--saffron-dark);
+      color: #fff;
+      font-weight: 600;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    }
+    .staff-table tr:nth-child(odd) {
+      background: #fff9f0;
+    }
+    .staff-table tr:hover {
+      background: var(--hover-color);
+      transition: background 0.15s ease;
+    }
+    /* Action buttons in a row with colon separator */
+    .staff-table .actions {
+      display: flex;
+      align-items: center;
+      text-align: center;
+    }
+    .staff-table .actions button:not(:last-child)::after {
+      margin: 0 0.5rem;
+      font-weight: bold;
+      color: var(--saffron-dark);
+    }
+  
+    /* ==============================
+       5) Mobile Overrides (max-width: 600px)
+    =============================== */
+    @media (max-width: 600px) {
+      /* Floating Action Button on Mobile */
+      #addStaffBtn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: #ff9933;
+        color: #fff;
+        font-size: 24px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        z-index: 1100;
+        padding: 0;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+      }
+      #addStaffBtn:hover {
+        transform: translateY(-2px);
+      }
+      /* Hide text on mobile; show only icon */
+      #addStaffBtn .btn-text {
+        display: none !important;
+      }
+      #addStaffBtn .btn-icon {
+        font-size: 24px;
+      }
+  
+      /* Adjust heading & logo */
+      .logo {
+        font-size: 1.4rem;
+      }
+      .staff h1 {
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+      }
+  
+      /* Mobile card layout for staff table */
+      .staff-table thead {
+        display: none;
+      }
+      .staff-table, .staff-table tbody, .staff-table tr, .staff-table td {
+        display: block;
+        width: 100%;
+      }
+      .staff-table tr {
+        margin-bottom: 1.5rem;
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+        background: #fff;
+        overflow: hidden;
+      }
+      .staff-table td {
+        display: flex;
+        flex-direction: column;
+        text-align: left;
+        padding: 0.75rem;
+        border-bottom: 1px solid var(--border-color);
+      }
+      .staff-table td:last-child {
+        border-bottom: none;
+      }
+      .staff-table td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        margin-bottom: 0.3rem;
+        color: var(--text-color);
+      }
+    }
+  
+    /* ==============================
+       6) Modal & Confirmation Dialog
+    =============================== */
+    .modal,
+    .confirmation-dialog {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 1001;
+      animation: fadeIn 0.3s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    .modal-content {
+      background: var(--card-background);
+      padding: 2rem;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      animation: slideIn 0.3s;
+    }
+    @keyframes slideIn {
+      from { transform: translateY(-20px); }
+      to   { transform: translateY(0); }
+    }
+    .modal-content h2 {
+      margin-bottom: 1.5rem;
+      color: var(--saffron-dark);
+    }
+    .modal-content label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #555;
+    }
+    .modal-content input,
+    .modal-content select {
+      width: 100%;
+      padding: 0.8rem;
+      margin-bottom: 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+    .button-group {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+    }
+    /* Highlight Confirmation Message */
+    .confirmation-dialog p {
+      font-size: 18px; /* Increase text size */
+      font-weight: bold; /* Make text bold */
+      color: #ff5722; /* Set text color (bright orange) */
+      background-color: #ffe6e6; /* Light red background */
+      padding: 10px; /* Add spacing inside */
+      border-radius: 8px; /* Rounded corners */
+      text-align: center; /* Center text */
+      border: 2px solid #ff5722; /* Border to make it pop */
+    }
+
+    .confirmation-dialog .button-group {
+      justify-content: center;
+    }
+  
+    /* ==============================
+       7) Footer
+    =============================== */
+    footer {
+      background: #fff;
+      padding: 1rem;
+      text-align: center;
+      color: #666;
+      border-top: 1px solid var(--border-color);
+      margin-top: 2rem;
+    }
+  
+    /* ==============================
+       8) Button Enhancements
+    =============================== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      border: none;
+      gap: 0.5rem;
+      font-size: 1rem;
+    }
+    .btn-primary {
+      background: var(--saffron-dark);
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .btn-outline {
+      background: #fff;
+      color: var(--saffron-dark);
+      border: 2px solid var(--border-color);
+    }
+    .btn-outline:hover {
+      border-color: var(--saffron-dark);
+      color: var(--saffron-dark);
+    }
+    .btn-danger {
+      background: var(--danger-color);
+      color: #fff;
+    }
+    .btn-danger:hover {
+      background: #ff3d00;
+    }
+    .btn-edit {
+      background: #fff;
+      color: var(--saffron-dark);
+      border: 2px solid var(--border-color);
+    }
+    .btn-edit:hover {
+      background: var(--saffron-dark);
+      color: #fff;
+    }
+  
+    /* ==============================
+       9) Tablet & Smaller Devices
+    =============================== */
+    @media (max-width: 768px) {
+      .staff {
+        padding: 90px 1rem 40px;
+      }
+      .staff h1 {
+        font-size: 2rem;
+      }
+      .staff-table th,
+      .staff-table td {
+        padding: 0.8rem;
+        font-size: 0.9rem;
+      }
+      .btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+      }
+      .modal-content {
+        margin: 1rem;
+        padding: 1.5rem;
+      }
+      .confirmation-dialog {
+        margin: 1rem;
+        padding: 1.5rem;
+      }
+    }
+    @media (max-width: 480px) {
+      .staff h1 {
+        font-size: 1.6rem;
+      }
+      .staff-table th,
+      .staff-table td {
+        padding: 0.5rem;
+        font-size: 0.8rem;
+      }
+      .btn {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.8rem;
+      }
+      .modal-content {
+        padding: 1rem;
+      }
+      .modal-content h2 {
+        font-size: 1.25rem;
+      }
+      .modal-content input,
+      .modal-content select {
+        font-size: 0.9rem;
+      }
+      .confirmation-dialog p {
+        font-size: 0.9rem;
+      }
+    }
+    /* Default: Show header button, hide mobile button */
+    #addStaffBtnDesktop {
+      display: inline-flex;  /* Visible on desktop */
+      position: static;      /* Normal position in header nav */
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      background: #fff;
+      color: #ff6f00; /* saffron dark or your color */
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    #addStaffBtnDesktop:hover {
+      background: #ff6f00;
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    /* Hide the mobile FAB by default */
+    #addStaffBtnMobile {
+      display: none;
+    }
+
+
+    /* Mobile overrides */
+    @media (max-width: 600px) {
+      /* Hide header button on mobile */
+      #addStaffBtnDesktop {
+        display: none;
+      }
+      /* Show floating mobile button */
+      #addStaffBtnMobile {
+        display: flex;
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: #ff9933; /* or your saffron color */
+        color: #fff;
+        font-size: 24px;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        z-index: 1100;
+        padding: 0;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+      }
+      #addStaffBtnMobile:hover {
+        transform: translateY(-2px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <nav class="container">
+      <a href="#" class="logo">Staff Administration <span>👥💼</span></a>
+      <!-- On larger screens, show full button with text -->
+      <button id="addStaffBtnDesktop" class="btn btn-primary">
+        <span class="btn-icon">➕</span>
+        <span class="btn-text">Add New Staff 🚀✨</span>
+      </button>
+    </nav>
+  </header>
+
+  <button id="addStaffBtnMobile" class="btn btn-primary">
+    <span class="btn-icon">➕</span>
+  </button>
+
+  <!-- Main Content -->
+  <main>
+    <section class="staff">
+      <div class="container">
+        <h1>Staff Management Dashboard 👥</h1>
+        <!-- Search Bar -->
+        <div class="header-search">
+          <button id="searchToggleBtn" class="btn search-btn">🔍</button>
+          <input type="text" id="searchBar" placeholder="Search..." />
+        </div>
+
+        <table class="staff-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Role</th>
+              <th>Name</th>
+              <th>Phone Number</th>
+              <th>Email</th>
+              <th>Date of Birth</th>
+              <th>Salary Type</th>
+              <th>Salary Amount</th>
+              <th class="actions">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="staffTableBody">
+            <!-- Dynamically added rows go here -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- Status Message -->
+  <div id="statusMessage" class="status-message" style="display: none;"></div>
+
+  <!-- Modal for Adding/Editing Staff -->
+  <div id="addStaffModal" class="modal">
+    <div class="modal-content">
+      <h2>Add New Staff 🌟</h2>
+      <form id="addStaffForm">
+        <label for="role">Role:</label>
+        <select id="role" name="role" required>
+          <option value="Friend">Friend</option>
+          <option value="Student">Student</option>
+          <option value="Bigari">Bigari</option>
+          <option value="Karagir">Karagir</option>
+        </select>
+
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required />
+
+        <label for="phone">Phone Number:</label>
+        <input type="tel" id="phone" name="phone" required />
+        <div class="error-message" id="phoneError" style="display: none; color: var(--danger-color);">
+          Phone number must be exactly 10 digits.
+        </div>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required />
+
+        <label for="dob">Date of Birth:</label>
+        <input type="date" id="dob" name="dob" required />
+
+        <label for="salaryType">Salary Type:</label>
+        <select id="salaryType" name="salaryType" required>
+          <option value="monthly">Monthly</option>
+          <option value="daily">Daily</option>
+        </select>
+
+        <label for="salary">Salary Amount:</label>
+        <input type="number" id="salary" name="salary" required />
+                    
+        <div class="button-group">
+          <button type="button" id="closeModalBtn" class="btn btn-outline">
+            Cancel ✖️
+          </button>
+          <button type="submit" class="btn btn-primary">
+            Save 💾
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Confirmation Dialog for Deletion -->
+  <div id="confirmationModal" class="confirmation-dialog">
+    <p>Are you sure you want to delete this staff member? 🗑️</p>
+    <div class="button-group">
+      <button id="confirmDeleteBtn" class="btn btn-primary">Delete 🔥</button>
+      <button id="cancelDeleteBtn" class="btn btn-outline">Cancel ❌</button>
+    </div>
+  </div>
+
+  <!-- Confirmation Dialog for Saving -->
+  <div id="saveConfirmationModal" class="confirmation-dialog">
+    <p>Are you sure you want to save these changes? 🤔</p>
+    <div class="button-group">
+      <button id="confirmSaveBtn" class="btn btn-primary">Save 💾</button>
+      <button id="cancelSaveBtn" class="btn btn-outline">Cancel ❌</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>&copy; <span id="year"></span> Staff Management Dashboard. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- JavaScript remains mostly unchanged -->
+  <script type="module">
+    import { auth, db, collection, getDocs, updateDoc, deleteDoc, doc, getDoc, setDoc } from './firebase.js';
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+
+    // Set copyright year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Wait for auth state
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      const currentUserEmail = user.email;
+      console.log("User authenticated:", currentUserEmail);
+      const staffCollectionRef = collection(db, 'users', currentUserEmail, 'staff');
+
+      // DOM Elements
+      const addStaffBtnDesktop = document.getElementById('addStaffBtnDesktop');
+      const addStaffBtnMobile = document.getElementById('addStaffBtnMobile');
+      const addStaffModal = document.getElementById('addStaffModal');
+      const closeModalBtn = document.getElementById('closeModalBtn');
+      const addStaffForm = document.getElementById('addStaffForm');
+      const staffTableBody = document.getElementById('staffTableBody');
+      const phoneInput = document.getElementById('phone');
+      const phoneError = document.getElementById('phoneError');
+      const confirmationModal = document.getElementById('confirmationModal');
+      const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+      const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+      const saveConfirmationModal = document.getElementById('saveConfirmationModal');
+      const confirmSaveBtn = document.getElementById('confirmSaveBtn');
+      const cancelSaveBtn = document.getElementById('cancelSaveBtn');
+      const searchToggleBtn = document.getElementById('searchToggleBtn');
+      const searchBar = document.getElementById('searchBar');
+
+      let rowToDelete = null;
+      let isEditing = false;
+      let editingId = null;
+
+      // Open Add Staff Modal
+      function openAddStaffModal() {
+        addStaffForm.reset();
+        phoneError.style.display = 'none';
+        addStaffModal.style.display = 'flex';
+        isEditing = false;
+        editingId = null;
+      }
+
+      addStaffBtnDesktop.addEventListener('click', openAddStaffModal);
+      addStaffBtnMobile.addEventListener('click', openAddStaffModal);
+      closeModalBtn.addEventListener('click', () => addStaffModal.style.display = 'none');
+
+      // Validate Phone Number
+      function validatePhoneNumber(phone) {
+        const phoneRegex = /^\d{10}$/;
+        return phoneRegex.test(phone);
+      }
+
+      phoneInput.addEventListener('input', (e) => {
+        phoneError.style.display = validatePhoneNumber(e.target.value) ? 'none' : 'block';
+      });
+
+      // Format Date
+      function formatDate(isoDateStr) {
+        if (!isoDateStr) return "";
+        const [year, month, day] = isoDateStr.split("-");
+        return `${day}-${month}-${year}`;
+      }
+
+      // Render Staff Table
+      async function renderStaffTable() {
+        const querySnapshot = await getDocs(staffCollectionRef);
+        const staffData = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+        staffTableBody.innerHTML = staffData.map(staff => `
+          <tr>
+            <td data-label="ID">${staff.id}</td>
+            <td data-label="Role">${staff.role}</td>
+            <td data-label="Name">${staff.name}</td>
+            <td data-label="Phone Number">${staff.phone}</td>
+            <td data-label="Email">${staff.email}</td>
+            <td data-label="Date of Birth">${formatDate(staff.dob)}</td>
+            <td data-label="Salary Type">${staff.salaryType === 'monthly' ? 'Monthly' : 'Per Day'}</td>
+            <td data-label="Salary Amount">${Number(staff.salary).toFixed(2)}</td>
+            <td data-label="Actions" class="actions">
+              <button class="btn btn-edit" data-id="${staff.id}">Edit ✏️</button>
+              <button class="btn btn-danger" data-id="${staff.id}">Delete 🗑️</button>
+            </td>
+          </tr>
+        `).join('');
+      }
+
+      // Get Next Staff ID
+      async function getNextStaffId() {
+        const querySnapshot = await getDocs(staffCollectionRef);
+        const ids = querySnapshot.docs.map(doc => parseInt(doc.id) || 0);
+        return Math.max(0, ...ids) + 1;
+      }
+
+      // Form Submission
+      addStaffForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        saveConfirmationModal.style.display = 'flex';
+      });
+
+      confirmSaveBtn.addEventListener('click', async () => {
+        const role = document.getElementById('role').value;
+        const name = document.getElementById('name').value;
+        const phone = document.getElementById('phone').value;
+        const email = document.getElementById('email').value;
+        const dob = document.getElementById('dob').value;
+        const salaryType = document.getElementById('salaryType').value;
+        const salary = document.getElementById('salary').value;
+
+        if (!role || !name || !phone || !email || !dob || !salaryType || !salary) {
+          alert('All fields are required.');
+          return;
+        }
+        if (!validatePhoneNumber(phone)) {
+          alert('Invalid phone number. Must be 10 digits.');
+          return;
+        }
+        if (!/^\S+@\S+\.\S+$/.test(email)) {
+          alert('Invalid email format.');
+          return;
+        }
+        if (isNaN(Number(salary))) {
+          alert('Invalid salary.');
+          return;
+        }
+
+        try {
+          if (isEditing && editingId) {
+            const staffRef = doc(staffCollectionRef, editingId);
+            await updateDoc(staffRef, { role, name, phone, email, dob, salaryType, salary: Number(salary) });
+            showStatus('Staff updated successfully! 🎉');
+          } else {
+            const nextId = await getNextStaffId();
+            await setDoc(doc(staffCollectionRef, nextId.toString()), {
+              id: nextId.toString(),
+              role,
+              name,
+              phone,
+              email,
+              dob,
+              salaryType,
+              salary: Number(salary)
+            });
+            showStatus('Staff added successfully! 🎉');
+          }
+          await renderStaffTable();
+          addStaffModal.style.display = 'none';
+          saveConfirmationModal.style.display = 'none';
+          isEditing = false;
+          editingId = null;
+        } catch (error) {
+          console.error('Error saving staff:', error);
+          showStatus('Error: ' + error.message, 'error');
+        }
+      });
+
+      cancelSaveBtn.addEventListener('click', () => {
+        saveConfirmationModal.style.display = 'none';
+      });
+
+      // Delete Functionality
+      staffTableBody.addEventListener('click', async (e) => {
+        if (e.target.classList.contains('btn-danger')) {
+          const id = e.target.getAttribute('data-id');
+          rowToDelete = id;
+          confirmationModal.style.display = 'flex';
+        } else if (e.target.classList.contains('btn-edit')) {
+          const id = e.target.getAttribute('data-id');
+          const staffRef = doc(staffCollectionRef, id);
+          const staffDoc = await getDoc(staffRef);
+          const staff = staffDoc.data();
+
+          document.getElementById('role').value = staff.role;
+          document.getElementById('name').value = staff.name;
+          document.getElementById('phone').value = staff.phone;
+          document.getElementById('email').value = staff.email;
+          document.getElementById('dob').value = staff.dob;
+          document.getElementById('salaryType').value = staff.salaryType;
+          document.getElementById('salary').value = staff.salary;
+
+          editingId = id;
+          isEditing = true;
+          addStaffModal.style.display = 'flex';
+        }
+      });
+
+      confirmDeleteBtn.addEventListener('click', async () => {
+        if (rowToDelete) {
+          const staffRef = doc(staffCollectionRef, rowToDelete);
+          await deleteDoc(staffRef);
+          await renderStaffTable();
+          rowToDelete = null;
+        }
+        confirmationModal.style.display = 'none';
+      });
+
+      cancelDeleteBtn.addEventListener('click', () => {
+        rowToDelete = null;
+        confirmationModal.style.display = 'none';
+      });
+
+      // Search Functionality
+      searchToggleBtn.addEventListener('click', () => {
+        searchBar.classList.toggle('active');
+        if (searchBar.classList.contains('active')) searchBar.focus();
+      });
+
+      searchBar.addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        const rows = document.querySelectorAll('#staffTableBody tr');
+        rows.forEach(row => {
+          const name = row.querySelector('td[data-label="Name"]')?.innerText.toLowerCase() || '';
+          const role = row.querySelector('td[data-label="Role"]')?.innerText.toLowerCase() || '';
+          const phone = row.querySelector('td[data-label="Phone Number"]')?.innerText.toLowerCase() || '';
+          const email = row.querySelector('td[data-label="Email"]')?.innerText.toLowerCase() || '';
+          row.style.display = (name.includes(searchTerm) || role.includes(searchTerm) || phone.includes(searchTerm) || email.includes(searchTerm)) ? '' : 'none';
+        });
+      });
+
+      // Show Status Messages
+      function showStatus(message, type = 'success') {
+        const statusEl = document.getElementById('statusMessage');
+        statusEl.textContent = message;
+        statusEl.className = `status-message ${type}`;
+        statusEl.style.display = 'block';
+        setTimeout(() => statusEl.style.display = 'none', 3000);
+      }
+
+      // Initial Render
+      renderStaffTable();
+    });
+  </script>
+</body>
+</html>

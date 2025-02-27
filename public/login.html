@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - Pramukhraj Electricals</title>
+  <script type="importmap">
+    {
+      "imports": {
+        "https://www.gstatic.com/firebasejs/11.2.0/": "https://www.gstatic.com/firebasejs/11.2.0/"
+      }
+    }
+  </script>
+  <script src="https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js" defer></script>
+  <style>
+    /* Reset & Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+    }
+    body {
+      background: #f5f5f5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Header */
+    header {
+      width: 100%;
+      padding: 15px 20px;
+      background: #fff;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo img {
+      width: 120px;
+      height: auto;
+      transition: transform 0.3s ease;
+    }
+    .logo img:hover { transform: scale(1.05); }
+    .nav-links a {
+      text-decoration: none;
+      color: #ff5722;
+      font-weight: 600;
+      padding: 8px 16px;
+      border: 2px solid #ff5722;
+      border-radius: 6px;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+    .nav-links a:hover {
+      background: #ff5722;
+      color: #fff;
+    }
+
+    /* Main Login Card */
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      width: 100%;
+    }
+    .auth-card {
+      background: #fff;
+      width: 100%;
+      max-width: 400px;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      animation: fadeIn 0.5s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .auth-card h1 {
+      margin-bottom: 20px;
+      color: #ff5722;
+      font-size: 1.8rem;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 20px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: background 0.3s ease, transform 0.2s ease;
+      width: 100%;
+      margin-bottom: 15px;
+    }
+    .btn-social {
+      background: #fff;
+      color: #333;
+      border: 1px solid #ddd;
+    }
+    .btn-social:hover {
+      background: #f5f5f5;
+      transform: translateY(-2px);
+    }
+    .btn-social img { width: 20px; }
+    .btn-primary {
+      background: #ff5722;
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background: #f4511e;
+      transform: translateY(-2px);
+    }
+
+    /* Form */
+    .login-form { margin-top: 20px; }
+    .form-group {
+      margin-bottom: 15px;
+      text-align: left;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+      color: #555;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+    .form-group input:focus {
+      border-color: #ff5722;
+      outline: none;
+    }
+
+    /* Separator */
+    .separator {
+      margin: 20px 0;
+      font-size: 0.9rem;
+      color: #666;
+      position: relative;
+      text-align: center;
+    }
+    .separator::before, .separator::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 40%;
+      height: 1px;
+      background: #ddd;
+    }
+    .separator::before { left: 0; }
+    .separator::after { right: 0; }
+
+    /* Error Message */
+    #error-message {
+      color: #e94e77;
+      margin-top: 15px;
+      font-size: 0.9rem;
+      display: none;
+    }
+
+    /* Footer */
+    footer {
+      padding: 15px;
+      text-align: center;
+      color: #666;
+      font-size: 0.9rem;
+      background: #fff;
+      width: 100%;
+      box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 480px) {
+      header { padding: 10px 15px; }
+      .logo img { width: 100px; }
+      .nav-links a { padding: 6px 12px; font-size: 0.9rem; }
+      .auth-card { padding: 20px; max-width: 90%; }
+      .auth-card h1 { font-size: 1.5rem; }
+      .btn { padding: 10px 15px; font-size: 0.9rem; }
+      .form-group input { padding: 8px; font-size: 0.9rem; }
+    }
+    /* Spinner for the button */
+    .spinner {
+      border: 3px solid rgba(255,255,255,0.3);
+      border-left-color: #fff; /* White spinner color for contrast on the primary button */
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 8px; /* Space between text and spinner */
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <a href="./index.html"><img src="assets/logo.png" alt="Pramukhraj Electricals Logo"></a>
+    </div>
+    <div class="nav-links">
+      <a href="./signup.html">Sign Up</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="auth-card">
+      <h1>Account Login</h1>
+      <button class="btn btn-social" id="googleSignIn">
+        <img src="assets/google-icon.png" alt="Google Icon">
+        Continue with Google
+      </button>
+      <div class="separator">OR</div>
+      <form id="manualLoginForm" class="login-form">
+        <div class="form-group">
+          <label for="manualEmail">Email Address</label>
+          <input type="email" id="manualEmail" name="email" placeholder="Enter your email" required>
+        </div>
+        <div class="form-group">
+          <label for="manualPassword">Password</label>
+          <input type="password" id="manualPassword" name="password" placeholder="Enter your password" required>
+        </div>
+        <button type="submit" class="btn btn-primary" id="signInBtn">
+          <span class="btn-text">Sign In</span>
+          <span class="spinner" style="display: none;"></span>
+        </button>
+        
+      </form>
+      <div id="error-message"></div>
+      <p style="margin-top: 15px; font-size: 0.9rem;">
+        New user? <a href="./signup.html" style="color: #ff5722; text-decoration: none;">Create an account</a>
+      </p>
+    </div>
+  </main>
+
+  <footer>
+    © <span id="year"></span> Pramukhraj Electricals. All rights reserved.
+  </footer>
+
+  <script type="module">
+    import { auth, signInWithGoogle, signInWithEmailAndPassword, db, doc, getDoc, setDoc } from './firebase.js';
+
+    // Set current year in footer
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // DOM Elements
+    const googleSignInBtn = document.getElementById('googleSignIn');
+    const manualLoginForm = document.getElementById('manualLoginForm');
+    const errorMessage = document.getElementById('error-message');
+
+    // Utility Functions
+    function displayError(message) {
+      errorMessage.textContent = message;
+      errorMessage.style.display = 'block';
+      setTimeout(() => errorMessage.style.display = 'none', 5000);
+    }
+
+    function getFirebaseErrorMessage(error) {
+      const errorMap = {
+        'auth/invalid-email': 'Invalid email format.',
+        'auth/user-disabled': 'This account has been disabled.',
+        'auth/user-not-found': 'No account found with this email.',
+        'auth/wrong-password': 'Incorrect password.',
+        'auth/popup-closed-by-user': 'Sign-in popup was closed.',
+        'auth/network-request-failed': 'Network error. Check your connection.',
+        'auth/too-many-requests': 'Too many attempts. Please try again later.'
+      };
+      return errorMap[error.code] || error.message || 'An error occurred.';
+    }
+
+    // Check if profile is complete
+    async function isProfileComplete(user) {
+      const userDocRef = doc(db, 'users', user.email);
+      const userDoc = await getDoc(userDocRef);
+      if (!userDoc.exists()) return false;
+      const userData = userDoc.data();
+      return userData.fullName && userData.phone && userData.dob;
+    }
+
+    // Google Sign-In
+    googleSignInBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      try {
+        const result = await signInWithGoogle();
+        const user = result.user;
+        const userDocRef = doc(db, 'users', user.email);
+        const userDoc = await getDoc(userDocRef);
+
+        if (!userDoc.exists()) {
+          await setDoc(userDocRef, {
+            email: user.email,
+            name: user.displayName || '',
+            phone: '',
+            dob: '',
+            createdAt: new Date().toISOString()
+          });
+          window.location.href = './complete-profile.html';
+        } else if (await isProfileComplete(user)) {
+          window.location.href = './dashboard.html';
+        } else {
+          window.location.href = './complete-profile.html';
+        }
+      } catch (error) {
+        displayError(getFirebaseErrorMessage(error));
+        console.error('Google Sign-In Error:', error);
+      }
+    });
+
+    // Manual Login
+    manualLoginForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  // Get the button elements
+  const signInBtn = document.getElementById('signInBtn');
+  const btnText = signInBtn.querySelector('.btn-text');
+  const spinner = signInBtn.querySelector('.spinner');
+  
+  // Show spinner and disable the button
+  spinner.style.display = 'inline-block';
+  btnText.style.display = 'none';
+  signInBtn.disabled = true;
+  
+  const email = document.getElementById('manualEmail').value.trim();
+  const password = document.getElementById('manualPassword').value;
+  
+  if (!email || !password) {
+    displayError('Please fill in all fields.');
+    // Restore button state
+    spinner.style.display = 'none';
+    btnText.style.display = 'inline';
+    signInBtn.disabled = false;
+    return;
+  }
+  
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+    const userDocRef = doc(db, 'users', user.email);
+    const userDoc = await getDoc(userDocRef);
+  
+    if (!userDoc.exists()) {
+      await setDoc(userDocRef, {
+        email: user.email,
+        name: '',
+        phone: '',
+        dob: '',
+        createdAt: new Date().toISOString()
+      });
+      window.location.href = './dashboard.html';
+    } else if (await isProfileComplete(user)) {
+      window.location.href = './dashboard.html';
+    } else {
+      window.location.href = './complete-profile.html';
+    }
+  } catch (error) {
+    displayError(getFirebaseErrorMessage(error));
+    console.error('Manual Login Error:', error);
+  } finally {
+    // Restore button state regardless of outcome
+    spinner.style.display = 'none';
+    btnText.style.display = 'inline';
+    signInBtn.disabled = false;
+  }
+});
+  </script>
+</body>
+</html>

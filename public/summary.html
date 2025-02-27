@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Summary</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.16.0/pdf-lib.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        :root {
+            --primary-color: #ff5722;
+            --secondary-color: #FFC107;
+            --danger-color: #F44336;
+            --success-color: #4CAF50;
+            --background-color: #F5F5F5;
+            --text-color: #333;
+            --border-color: #ddd;
+        }
+
+        body {
+            background-color: var(--background-color);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+
+        .header-title {
+            font-size: 24px;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        main {
+            margin-top: 50px;
+            padding: 20px;
+        }
+
+        .attendance-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .attendance-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .attendance-table th,
+        .attendance-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .attendance-table th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .status-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 2px;
+        }
+
+        .present {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .absent {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .half-day {
+            background-color: var(--secondary-color);
+            color: black;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--text-color);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            display: none;
+        }
+        .icon-column {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+        }
+        .icon-row {
+            background-color: var(--background-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .icon-container {
+            text-align: center;
+            padding: 10px 0;
+        }
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            color: var(--text-color);
+            margin: 0 5px;
+        }
+
+        .icon-btn:hover {
+            transform: scale(1.1);
+            background: var(--background-color);
+        }
+
+        .pdf-icon:hover {
+            color: #ff4757; /* Red color for PDF icon */
+        }
+
+        .whatsapp-icon:hover {
+            color: #25d366; /* WhatsApp green color */
+        }
+
+        .staff-details {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .staff-details h2 {
+            margin-bottom: 20px;
+        }
+
+        .staff-details ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .staff-details li {
+            margin-bottom: 10px;
+        }
+
+        .staff-details li span {
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 10px; }
+            .attendance-container { padding: 20px; }
+            .staff-details { padding: 20px; }
+        }
+
+        .search-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search-btn:hover {
+            background-color: #e64a19;
+        }
+
+        .search-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .loading {
+            position: relative;
+            pointer-events: none;
+        }
+
+        .loading::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #fff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.8s linear infinite;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes spin {
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .date-range-picker {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .date-range-picker label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .date-range-picker input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .date-range-picker button {
+            padding: 8px 16px;
+            background-color: #ff5722;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .date-range-picker button:hover {
+            background-color: #ff4757;
+        }
+
+        @media (max-width: 600px) {
+            .attendance-container { overflow-x: auto; }
+            .date-range-picker { flex-direction: column; }
+            .header-content { padding: 10px; }
+        }
+        body.dark-mode {
+            --primary-color: #bb86fc;
+            --secondary-color: #3700b3;
+            --background-color: #121212;
+            --card-background: #1e1e1e;
+            --text-color: #e0e0e0;
+            --border-color: #333;
+        }
+        body.dark-mode .attendance-container,
+        body.dark-mode .staff-details {
+            background-color: var(--card-background);
+            color: var(--text-color);
+        }
+        body.dark-mode .attendance-table th {
+            background-color: var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1 class="header-title">Attendance Summary</h1>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="staff-details">
+                <h2>Staff Details :</h2>
+                <ul id="staffDetails"></ul>
+            </div>
+            <div class="date-range-picker">
+                <label>
+                    Start Date:
+                    <input type="date" id="startDate">
+                </label>
+                <label>
+                    End Date:
+                    <input type="date" id="endDate">
+                </label>
+                <button id="searchButton" class="search-btn">
+                    <i class="fas fa-search"></i> Search
+                </button>
+            </div>
+            <div class="attendance-container">
+                <table class="attendance-table" id="summaryTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="summaryBody"></tbody>
+                </table>
+            </div>
+            <div class="icon-container">
+                <button id="whatsappBtn" class="icon-btn whatsapp-icon">
+                    <i class="fab fa-whatsapp"></i> WhatsApp
+                </button>
+                <button id="pdfBtn" class="icon-btn pdf-icon">
+                    <i class="fas fa-file-pdf"></i> PDF
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script type="module">
+        import { auth, db, collection, getDocs, doc, getDoc } from './firebase.js';
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+        import { PDFDocument, rgb, StandardFonts } from 'https://cdn.skypack.dev/pdf-lib';
+        import fontkit from 'https://cdn.skypack.dev/@pdf-lib/fontkit';
+        // Initialize jsPDF
+        window.jsPDF = window.jspdf.jsPDF;
+
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const staffId = urlParams.get('staffId');
+
+        // DOM Elements
+        const summaryBody = document.getElementById('summaryBody');
+        const staffDetails = document.getElementById('staffDetails');
+        const startDateInput = document.getElementById('startDate');
+        const endDateInput = document.getElementById('endDate');
+        const whatsappBtn = document.getElementById('whatsappBtn');
+        const pdfBtn = document.getElementById('pdfBtn');
+        const searchButton = document.getElementById('searchButton');
+
+        let currentUserEmail = null;
+        let startDate, endDate;
+
+        // Theme Handling
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+        }
+
+        // Load staff details
+        async function loadStaffDetails() {
+            try {
+                if (!staffId || !currentUserEmail) {
+                    throw new Error("No staff ID or user email provided.");
+                }
+
+                const staffRef = doc(db, "users", currentUserEmail, "staff", staffId);
+                const staffSnapshot = await getDoc(staffRef);
+
+                if (!staffSnapshot.exists()) {
+                    throw new Error("Staff not found.");
+                }
+
+                const staffData = staffSnapshot.data();
+                staffDetails.innerHTML = `
+                    <li><span>Name:</span> ${staffData.name || 'N/A'}</li>
+                    <li><span>Mobile Number:</span> ${staffData.phone || 'N/A'}</li>
+                    <li><span>Email:</span> ${staffData.email || 'N/A'}</li>
+                    <li><span>Birthday:</span> ${staffData.dob || 'N/A'}</li>
+                    <li><span>Role:</span> ${staffData.role || 'N/A'}</li>
+                `;
+            } catch (error) {
+                console.error("Error fetching staff details:", error);
+                showToast("Failed to load staff details: " + error.message, "error");
+            }
+        }
+
+        async function loadAttendanceSummary() {
+            try {
+                if (!staffId || !currentUserEmail) {
+                    throw new Error("No staff ID or user email provided.");
+                }
+
+                const attendanceRef = collection(db, "users", currentUserEmail, "attendance", staffId, "records");
+                const attendanceSnapshot = await getDocs(attendanceRef);
+                summaryBody.innerHTML = '';
+
+                if (attendanceSnapshot.empty) {
+                    summaryBody.innerHTML = `<tr><td colspan="2">No records found for the selected date range.</td></tr>`;
+                    return;
+                }
+
+                const latestRecords = new Map();
+                attendanceSnapshot.forEach(doc => {
+                    const { date, status } = doc.data();
+                    const dateObj = parseDate(date);
+                    const startDateObj = startDate ? new Date(startDate) : null;
+                    if (startDateObj) startDateObj.setHours(0, 0, 0, 0);
+                    const endDateObj = endDate ? new Date(endDate) : null;
+                    if (endDateObj) endDateObj.setHours(23, 59, 59, 999);
+                    if ((!startDate || dateObj >= startDateObj) && (!endDate || dateObj <= endDateObj)) {
+                        latestRecords.set(date, status);
+                    }
+                });
+
+                latestRecords.forEach((status, date) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${date}</td>
+                        <td>${status}</td>
+                    `;
+                    summaryBody.appendChild(row);
+                });
+
+                if (latestRecords.size === 0) {
+                    summaryBody.innerHTML = `<tr><td colspan="2">No records found for the selected date range.</td></tr>`;
+                }
+            } catch (error) {
+                console.error("Error fetching attendance summary:", error);
+                showToast("Failed to load attendance records: " + error.message, "error");
+            }
+        }
+
+        // Parse date string (DD-MM-YYYY) to Date object
+        function parseDate(dateStr) {
+            const [day, month, year] = dateStr.split('-').map(Number);
+            return new Date(year, month - 1, day);
+        }
+
+        // Show toast notifications
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            toast.style.opacity = '1';
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => {
+                    toast.style.display = 'none';
+                }, 500);
+            }, 3000);
+        }
+
+        // Validate date range
+        function validateDates() {
+            if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
+                showToast("Start date cannot be later than the end date.", "error");
+                endDateInput.value = '';
+                endDate = null;
+                return false;
+            }
+            return true;
+        }
+
+        // Event listeners for date inputs
+        startDateInput.addEventListener('change', () => {
+            startDate = startDateInput.value;
+            validateDates();
+        });
+
+        endDateInput.addEventListener('change', () => {
+            endDate = endDateInput.value;
+            validateDates();
+        });
+
+        // Search button click handler
+        searchButton.addEventListener('click', async () => {
+            try {
+                if (!validateDates()) return;
+
+                searchButton.disabled = true;
+                searchButton.classList.add('loading');
+                await loadAttendanceSummary();
+            } catch (error) {
+                console.error("Search failed:", error);
+                showToast("Search failed: " + error.message, "error");
+            } finally {
+                searchButton.disabled = false;
+                searchButton.classList.remove('loading');
+            }
+        });
+
+        // Helper to format dates
+        const formatDate = (date) => {
+        const options = { day: '2-digit', month: '2-digit', year: 'numeric', weekday: 'short' };
+        return date.toLocaleDateString('en-GB', options).replace(/,/g, '-');
+        };
+
+        // PDF Generation (Download PDF)
+        pdfBtn.addEventListener("click", async () => {
+        try {
+            const existingPdfBytes = await fetch("letterpad.pdf").then(res => res.arrayBuffer());
+            const { PDFDocument, rgb } = PDFLib;
+            const pdfDoc = await PDFDocument.load(existingPdfBytes);
+            let currentPage = pdfDoc.getPages()[0];
+            const primaryColor = rgb(0.1, 0.2, 0.6);
+            const textColor = rgb(0, 0, 0);
+
+            let startY = 640;
+            const today = new Date();
+            const formattedDate = `${today.getDate()}-${today.getMonth() + 1}-${today.getFullYear()}`;
+
+            const staffDetails = document.getElementById("staffDetails").querySelectorAll("li");
+            const staffName = staffDetails[0]?.innerText.split(": ")[1] || "N/A";
+            const staffPhone = staffDetails[1]?.innerText.split(": ")[1] || "N/A";
+            const staffEmail = staffDetails[2]?.innerText.split(": ")[1] || "N/A";
+
+            currentPage.drawText("Staff Details:", { x: 50, y: startY, size: 14, color: primaryColor });
+            startY -= 25;
+            currentPage.drawText(`Name: ${staffName}`, { x: 60, y: startY, size: 12, color: textColor });
+            startY -= 20;
+            currentPage.drawText(`Mobile: ${staffPhone}`, { x: 60, y: startY, size: 12, color: textColor });
+            startY -= 20;
+            currentPage.drawText(`Email: ${staffEmail}`, { x: 60, y: startY, size: 12, color: textColor });
+            startY -= 40;
+            currentPage.drawText("Attendance Summary", { x: 50, y: startY, size: 16, color: primaryColor });
+            startY -= 15;
+            currentPage.drawText(`Printed on: ${formattedDate}`, { x: 50, y: startY, size: 10, color: textColor });
+
+            function addTableHeaders(page, yPosition) {
+            page.drawText("Date", { x: 50, y: yPosition, size: 12, color: primaryColor });
+            page.drawText("Status", { x: 200, y: yPosition, size: 12, color: primaryColor });
+            return yPosition - 25;
+            }
+            let tableStartY = addTableHeaders(currentPage, startY - 40);
+
+            document.querySelectorAll("#summaryBody tr").forEach(row => {
+            const cells = row.querySelectorAll("td");
+            if (cells.length > 0) {
+                if (tableStartY < 100) {
+                const newPage = pdfDoc.addPage();
+                currentPage = newPage;
+                tableStartY = addTableHeaders(currentPage, 750);
+                }
+                currentPage.drawText(cells[0].innerText, { x: 50, y: tableStartY, size: 11, color: textColor });
+                currentPage.drawText(cells[1].innerText, { x: 200, y: tableStartY, size: 11, color: textColor });
+                tableStartY -= 20;
+            }
+            });
+            const modifiedPdfBytes = await pdfDoc.save();
+            const blob = new Blob([modifiedPdfBytes], { type: "application/pdf" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `Attendance_Summary_${staffName}.pdf`;
+            link.click();
+        } catch (error) {
+            console.error("Error generating PDF:", error);
+            showToast("Failed to generate PDF: " + error.message, "error");
+        }
+        });
+        whatsappBtn.addEventListener('click', async () => {
+        try {
+            // Fetch mobile number from staff details
+            const staffItems = document.getElementById("staffDetails").querySelectorAll("li");
+            const staffPhone = staffItems[1]?.innerText.split(": ")[1] || "";
+            if (!staffPhone) {
+            throw new Error("No mobile number available for this staff.");
+            }
+            // Clean phone number (remove spaces, dashes, etc.)
+            const cleanedPhone = staffPhone.replace(/\D/g, '');
+            if (cleanedPhone.length < 10) {
+            throw new Error("Invalid mobile number format.");
+            }
+
+            // Generate PDF Blob using your original PDF generation logic
+            const existingPdfBytes = await fetch("letterpad.pdf").then(res => res.arrayBuffer());
+            const { PDFDocument, rgb, StandardFonts } = PDFLib;
+            const pdfDoc = await PDFDocument.load(existingPdfBytes);
+            let currentPage = pdfDoc.getPages()[0];
+            const primaryColor = rgb(0.1, 0.2, 0.6);
+            const textColor = rgb(0, 0, 0);
+            // Use built-in fonts
+            const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+
+            let startY = 640;
+            const today = new Date();
+            const formattedDate = `${today.getDate()}-${today.getMonth() + 1}-${today.getFullYear()}`;
+
+            const staffName = staffItems[0]?.innerText.split(": ")[1] || "N/A";
+            const staffPhoneNum = staffItems[1]?.innerText.split(": ")[1] || "N/A";
+            const staffEmail = staffItems[2]?.innerText.split(": ")[1] || "N/A";
+
+            currentPage.drawText("Staff Details:", { x: 50, y: startY, size: 14, color: primaryColor });
+            startY -= 25;
+            currentPage.drawText(`Name: ${staffName}`, { x: 60, y: startY, size: 12, color: textColor });
+            startY -= 20;
+            currentPage.drawText(`Mobile: ${staffPhoneNum}`, { x: 60, y: startY, size: 12, color: textColor });
+            startY -= 20;
+            currentPage.drawText(`Email: ${staffEmail}`, { x: 60, y: startY, size: 12, color: textColor });
+            startY -= 40;
+            currentPage.drawText("Attendance Summary", { x: 50, y: startY, size: 16, color: primaryColor });
+            startY -= 15;
+            currentPage.drawText(`Printed on: ${formattedDate}`, { x: 50, y: startY, size: 10, color: textColor });
+
+            function addTableHeaders(page, yPosition) {
+            page.drawText("Date", { x: 50, y: yPosition, size: 12, color: primaryColor });
+            page.drawText("Status", { x: 200, y: yPosition, size: 12, color: primaryColor });
+            return yPosition - 25;
+            }
+            let tableStartY = addTableHeaders(currentPage, startY - 40);
+
+            document.querySelectorAll("#summaryBody tr").forEach(row => {
+            const cells = row.querySelectorAll("td");
+            if (cells.length > 0) {
+                if (tableStartY < 100) {
+                currentPage = pdfDoc.addPage();
+                tableStartY = addTableHeaders(currentPage, 750);
+                }
+                currentPage.drawText(cells[0].innerText, { x: 50, y: tableStartY, size: 11, color: textColor });
+                currentPage.drawText(cells[1].innerText, { x: 200, y: tableStartY, size: 11, color: textColor });
+                tableStartY -= 20;
+            }
+            });
+
+            const modifiedPdfBytes = await pdfDoc.save();
+            const blob = new Blob([modifiedPdfBytes], { type: "application/pdf" });
+            const file = new File([blob], `Attendance_Summary_${staffName}.pdf`, { type: "application/pdf" });
+
+            // Use the Web Share API if available; fallback to original method otherwise.
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({
+                title: 'Attendance Summary',
+                text: `Hello ${staffName},\nHere's your attendance summary for your records. Regards,\nPramukhraj Electricals`,
+                files: [file],
+            });
+            } else {
+            const reader = new FileReader();
+            reader.readAsDataURL(blob);
+            reader.onloadend = () => {
+                const base64Data = reader.result.split(',')[1];
+                const greeting = encodeURIComponent(`Hello ${staffName},\nHere's your attendance summary for your records. Regards,\nPramukhraj Electricals`);
+                const whatsappUrl = `https://wa.me/${cleanedPhone}?text=${greeting}%0A%0AAttendance PDF attached below (please copy and send manually):%0Adata:application/pdf;base64,${base64Data}`;
+                window.open(whatsappUrl, '_blank');
+                showToast("WhatsApp chat opened. Please paste the PDF data manually.", "info");
+            };
+            }
+        } catch (error) {
+            console.error("Error sharing via Web Share API:", error);
+            showToast("Failed to share via Web Share API: " + error.message, "error");
+        }
+        });
+
+        // Authentication and Initialization
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+            currentUserEmail = user.email;
+            console.log("User authenticated:", currentUserEmail);
+            if (staffId) {
+                loadStaffDetails();
+                loadAttendanceSummary();
+            } else {
+                showToast("No staff ID provided. Please try again.", "error");
+            }
+        });
+    </script>
+</body>
+</html>

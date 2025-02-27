@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advance Payment - Pramukhraj Electricals</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            position: relative; /* To position the dashboard icon */
+        }
+        h1, h2 {
+            color: #ff5722;
+            font-weight: bold;
+        }
+        h2 {
+            margin-top: 25px;
+        }
+        /* Form Styles */
+        .payment-form {
+            padding: 25px;
+            background: #fff9ed;
+            border-radius: 12px;
+            border: 1px solid #ffe0b2;
+        }
+        label {
+            display: block;
+            font-weight: 500;
+            margin: 15px 0 8px;
+            color: #555;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 8px;
+            font-family: inherit;
+        }
+        textarea {
+            min-height: 100px;
+        }
+        .btn-save {
+            background: #ff5722;
+            color: white;
+            padding: 14px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-save:hover {
+            background: #e64a19;
+        }
+        .btn-save:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+        .btn-save .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+            display: none;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Table Styles */
+        .history table {
+            width: 100%;
+            margin-top: 30px;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        .history th, .history td {
+            padding: 15px;
+            border: 1px solid #eee;
+            text-align: left;
+        }
+        .history th {
+            background: #ff5722;
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .history tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .history tbody tr:hover {
+            background-color: #f3f3f3;
+        }
+        /* Dashboard Icon Style */
+        .dashboard-icon {
+            position: absolute;
+            top: 10px; /* Adjust as needed */
+            right: 10px; /* Adjust as needed */
+            font-size: 24px; /* Adjust icon size */
+            color: #ff5722;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .dashboard-icon:hover {
+            color: #e64a19;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                margin: 15px auto;
+            }
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                margin-bottom: 15px;
+            }
+            h1 {
+                margin-bottom: 10px;
+                font-size: 24px;
+            }
+            .btn-back {
+                margin-bottom: 15px;
+            }
+            .payment-form {
+                padding: 15px;
+            }
+            input, select, textarea, .btn-save {
+                font-size: 15px;
+                padding: 10px;
+            }
+            .history th, .history td {
+                padding: 12px 8px;
+                font-size: 14px;
+            }
+            .dashboard-icon {
+                position: static; /* Reset position for mobile */
+                margin-top: 10px; /* Add margin if needed when stacked */
+                margin-left: auto; /* Push to the right if header is flex, or adjust as needed */
+                right: auto;
+                top: auto;
+            }
+             header {
+                justify-content: flex-start; /* Align items to start in mobile header */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💰 Advance Payment</h1>
+            <a href="dashboard.html" class="dashboard-icon">🏠</a>
+        </header>
+
+        <section class="payment-form">
+            <h2>📌 Add Advance Payment</h2>
+            <form id="advancePaymentForm">
+                <label for="staffSelect">👤 Select Staff:</label>
+                <select id="staffSelect" required></select>
+
+                <label for="amount">💰 Amount:</label>
+                <input type="number" id="amount" placeholder="Enter amount" required>
+
+                <label for="paymentDate">📅 Date:</label>
+                <input type="date" id="paymentDate" required>
+
+                <label for="paymentMethod">🏦 Payment Method:</label>
+                <select id="paymentMethod">
+                    <option value="Cash">Cash</option>
+                    <option value="UPI">UPI</option>
+                    <option value="Bank Transfer">Bank Transfer</option>
+                </select>
+
+                <label for="notes">📝 Notes (Optional):</label>
+                <textarea id="notes" placeholder="Enter any remarks..."></textarea>
+
+                <button type="submit" class="btn-save">
+                    <span class="spinner" id="saveSpinner"></span>
+                    💾 Save Payment
+                </button>
+            </form>
+        </section>
+
+        <section class="history">
+            <h2>📊 Advance Payment History</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Staff</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th>Method</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody id="paymentHistory"></tbody>
+            </table>
+        </section>
+    </div>
+
+    <script type="module">
+        import { db, collection, getDocs, addDoc, doc, updateDoc } from "./firebase.js";
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+        import { auth } from "./firebase.js"; // Assuming auth is exported from firebase.js
+
+        let currentUserEmail = null;
+
+           // Move loadStaff outside DOMContentLoaded
+        async function loadStaff() {
+            try {
+                const staffSelect = document.getElementById("staffSelect");
+                const staffSnapshot = await getDocs(collection(db, 'users', currentUserEmail, 'staff'));
+                staffSelect.innerHTML = "<option value=''>Select Staff</option>";
+                staffSnapshot.forEach((doc) => {
+                    const staffData = doc.data();
+                    const option = document.createElement("option");
+                    option.value = doc.id;
+                    option.textContent = `${staffData.name} (${staffData.role})`;
+                    staffSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error("Error loading staff:", error);
+                alert("Error loading staff data. Please try again.");
+            }
+        }
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUserEmail = user.email;
+                await loadStaff();
+                await loadPaymentHistory();
+            } else {
+                window.location.href = 'login.html'; // Redirect to login if not authenticated
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const staffSelect = document.getElementById("staffSelect");
+            const paymentHistory = document.getElementById("paymentHistory");
+            const advancePaymentForm = document.getElementById("advancePaymentForm");
+            const saveButton = document.querySelector(".btn-save");
+            const saveSpinner = document.getElementById("saveSpinner");
+
+            // Flag to prevent multiple submissions
+            let isSaving = false;
+            
+            // Save Advance Payment
+            advancePaymentForm.addEventListener("submit", async (e) => {
+                e.preventDefault();
+
+                // Prevent multiple saves
+                if (isSaving) {
+                    alert("Please wait... saving payment.");
+                    return;
+                }
+                isSaving = true;
+
+                const staffId = staffSelect.value;
+                const amount = document.getElementById("amount").value;
+                const paymentDate = document.getElementById("paymentDate").value;
+                const paymentMethod = document.getElementById("paymentMethod").value;
+                const notes = document.getElementById("notes").value;
+
+                if (!staffId || !amount || !paymentDate) {
+                    alert("Please fill in all required fields!");
+                    isSaving = false;
+                    return;
+                }
+
+                // Show saving animation and disable button
+                saveButton.disabled = true;
+                saveSpinner.style.display = "inline-block";
+                saveButton.textContent = "Saving Payment...";
+
+                try {
+                    await addDoc(collection(db, 'users', currentUserEmail, 'staff', staffId, 'advancePayments'), {
+                        amount: parseFloat(amount),
+                        date: paymentDate,
+                        method: paymentMethod,
+                        notes: notes,
+                    });
+
+                    const staffRef = doc(db, 'users', currentUserEmail, 'staff', staffId);
+                    await updateDoc(staffRef, {
+                        borrowedMoney: parseFloat(amount)
+                    });
+
+                    alert("Advance Payment Added Successfully!");
+                    advancePaymentForm.reset();
+                    await loadPaymentHistory();
+
+                } catch (error) {
+                    console.error("Error saving payment:", error);
+                    alert("Error saving payment. Please try again.");
+                } finally {
+                    saveButton.disabled = false;
+                    saveSpinner.style.display = "none";
+                    saveButton.textContent = "💾 Save Payment";
+                    isSaving = false;
+                }
+            });
+
+            // Load Advance Payment History
+            async function loadPaymentHistory() {
+                paymentHistory.innerHTML = "";
+                try {
+                    const staffSnapshot = await getDocs(collection(db, 'users', currentUserEmail, 'staff'));
+                    for (const staffDoc of staffSnapshot.docs) {
+                        const staffId = staffDoc.id;
+                        const paymentsRef = collection(db, 'users', currentUserEmail, 'staff', staffId, 'advancePayments');
+                        const paymentsSnapshot = await getDocs(paymentsRef);
+                        paymentsSnapshot.forEach((payment) => {
+                            const data = payment.data();
+                            const row = `<tr>
+                                            <td>${staffDoc.data().name}</td>
+                                            <td>₹${data.amount.toFixed(2)}</td>
+                                            <td>${data.date}</td>
+                                            <td>${data.method}</td>
+                                            <td>${data.notes || "-"}</td>
+                                        </tr>`;
+                            paymentHistory.innerHTML += row;
+                        });
+                    }
+                } catch (error) {
+                    console.error("Error loading payment history:", error);
+                    alert("Error loading payment history. Please try again.");
+                }
+            }
+        });
+    </script>
+</body>
+</html>
