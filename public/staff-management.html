@@ -39,7 +39,7 @@
     }
   
     /* ==============================
-       2) Header with Subtle Glass & Gradient
+       2) Header with Glass & Gradient
     =============================== */
     header {
       position: fixed;
@@ -51,7 +51,7 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       display: flex;
       justify-content: center;
-      backdrop-filter: blur(6px); /* Glass-like effect */
+      backdrop-filter: blur(6px);
     }
     header nav {
       width: 100%;
@@ -69,14 +69,15 @@
       align-items: center;
       gap: 0.5rem;
       text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      /* Extra padding for clarity */
+      padding: 0.25rem 0;
     }
     .logo span {
       font-size: 1.25rem;
     }
   
-    /* "Add Staff" Button for Desktop */
-    /* Default: full text button inside header */
-    #addStaffBtn {
+    /* "Add Staff" Button for Desktop - ORIGINAL COLORS */
+    #addStaffBtnDesktop {
       display: inline-flex;
       position: static;
       padding: 0.8rem 1.5rem;
@@ -90,7 +91,7 @@
       align-items: center;
       gap: 0.5rem;
     }
-    #addStaffBtn:hover {
+    #addStaffBtnDesktop:hover {
       background: var(--saffron-dark);
       color: #fff;
       transform: translateY(-2px);
@@ -142,7 +143,6 @@
       background: var(--hover-color);
       transition: background 0.15s ease;
     }
-    /* Action buttons in a row with colon separator */
     .staff-table .actions {
       display: flex;
       align-items: center;
@@ -155,21 +155,21 @@
     }
   
     /* ==============================
-       5) Mobile Overrides (max-width: 600px)
+       5) Mobile Overrides (for staff table)
     =============================== */
     @media (max-width: 600px) {
       /* Floating Action Button on Mobile */
-      #addStaffBtn {
+      #addStaffBtnMobile {
+        display: flex;
         position: fixed;
         bottom: 20px;
         right: 20px;
         width: 56px;
         height: 56px;
         border-radius: 50%;
-        background: #ff9933;
+        background: var(--saffron-dark);
         color: #fff;
         font-size: 24px;
-        display: flex;
         justify-content: center;
         align-items: center;
         box-shadow: 0 4px 8px rgba(0,0,0,0.2);
@@ -178,15 +178,12 @@
         cursor: pointer;
         transition: transform 0.3s ease;
       }
-      #addStaffBtn:hover {
+      #addStaffBtnMobile:hover {
         transform: translateY(-2px);
       }
-      /* Hide text on mobile; show only icon */
-      #addStaffBtn .btn-text {
-        display: none !important;
-      }
-      #addStaffBtn .btn-icon {
-        font-size: 24px;
+      /* Hide header button on mobile */
+      #addStaffBtnDesktop {
+        display: none;
       }
   
       /* Adjust heading & logo */
@@ -271,7 +268,7 @@
     .modal-content label {
       display: block;
       margin-bottom: 0.5rem;
-      color: #555;
+      color: var(--text-dark);
     }
     .modal-content input,
     .modal-content select {
@@ -287,18 +284,16 @@
       gap: 1rem;
       justify-content: flex-end;
     }
-    /* Highlight Confirmation Message */
     .confirmation-dialog p {
-      font-size: 18px; /* Increase text size */
-      font-weight: bold; /* Make text bold */
-      color: #ff5722; /* Set text color (bright orange) */
-      background-color: #ffe6e6; /* Light red background */
-      padding: 10px; /* Add spacing inside */
-      border-radius: 8px; /* Rounded corners */
-      text-align: center; /* Center text */
-      border: 2px solid #ff5722; /* Border to make it pop */
+      font-size: 18px;
+      font-weight: bold;
+      color: var(--saffron-dark);
+      background-color: #ffe6e6;
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+      border: 2px solid var(--saffron-dark);
     }
-
     .confirmation-dialog .button-group {
       justify-content: center;
     }
@@ -316,7 +311,7 @@
     }
   
     /* ==============================
-       8) Button Enhancements
+       8) Button Enhancements (Keep original button colors)
     =============================== */
     .btn {
       display: inline-flex;
@@ -330,23 +325,26 @@
       gap: 0.5rem;
       font-size: 1rem;
     }
+    /* Preserve original colors for action buttons */
     .btn-primary {
-      background: var(--saffron-dark);
-      color: #fff;
+      background: #fff;
+      color: #ff5722;
       box-shadow: 0 2px 6px rgba(0,0,0,0.15);
     }
     .btn-primary:hover {
+      background: #ff5722;
+      color: #fff;
       transform: translateY(-1px);
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
     .btn-outline {
       background: #fff;
-      color: var(--saffron-dark);
-      border: 2px solid var(--border-color);
+      color: #ff5722;
+      border: 2px solid #ff5722;
     }
     .btn-outline:hover {
-      border-color: var(--saffron-dark);
-      color: var(--saffron-dark);
+      background: #ff5722;
+      color: #fff;
     }
     .btn-danger {
       background: var(--danger-color);
@@ -357,16 +355,55 @@
     }
     .btn-edit {
       background: #fff;
-      color: var(--saffron-dark);
+      color: #ff5722;
       border: 2px solid var(--border-color);
     }
     .btn-edit:hover {
-      background: var(--saffron-dark);
+      background: #ff5722;
       color: #fff;
     }
   
     /* ==============================
-       9) Tablet & Smaller Devices
+       9) Search Bar Modernization
+    =============================== */
+    .header-search {
+      position: relative;
+      max-width: 400px;
+      margin: 1rem auto;
+    }
+    .header-search input {
+      width: 100%;
+      padding: 0.8rem 2.5rem 0.8rem 1rem;
+      border: 2px solid var(--border-color);
+      border-radius: 30px;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.3s ease;
+    }
+    .header-search input:focus {
+      border-color: var(--saffron-dark);
+    }
+    .header-search .search-btn {
+      position: absolute;
+      right: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--saffron-dark);
+      color: var(--text-light);
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .header-search .search-btn:hover {
+      background: var(--saffron-light);
+    }
+  
+    /* ==============================
+       10) Responsive Adjustments
     =============================== */
     @media (max-width: 768px) {
       .staff {
@@ -420,63 +457,14 @@
         font-size: 0.9rem;
       }
     }
-    /* Default: Show header button, hide mobile button */
-    #addStaffBtnDesktop {
-      display: inline-flex;  /* Visible on desktop */
-      position: static;      /* Normal position in header nav */
-      padding: 0.8rem 1.5rem;
-      border-radius: 8px;
-      background: #fff;
-      color: #ff6f00; /* saffron dark or your color */
-      border: none;
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.3s ease;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    #addStaffBtnDesktop:hover {
-      background: #ff6f00;
-      color: #fff;
-      transform: translateY(-2px);
-    }
-
-    /* Hide the mobile FAB by default */
-    #addStaffBtnMobile {
+  
+    /* ------------------------------
+       11) Floating Action Button Control on Mobile
+       Hide mobile FAB when modal is open
+    ------------------------------ */
+    /* When the add staff modal is active, hide the mobile FAB to avoid interference */
+    #addStaffModal.active ~ #addStaffBtnMobile {
       display: none;
-    }
-
-
-    /* Mobile overrides */
-    @media (max-width: 600px) {
-      /* Hide header button on mobile */
-      #addStaffBtnDesktop {
-        display: none;
-      }
-      /* Show floating mobile button */
-      #addStaffBtnMobile {
-        display: flex;
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        width: 56px;
-        height: 56px;
-        border-radius: 50%;
-        background: #ff9933; /* or your saffron color */
-        color: #fff;
-        font-size: 24px;
-        justify-content: center;
-        align-items: center;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        z-index: 1100;
-        padding: 0;
-        cursor: pointer;
-        transition: transform 0.3s ease;
-      }
-      #addStaffBtnMobile:hover {
-        transform: translateY(-2px);
-      }
     }
   </style>
 </head>
@@ -485,7 +473,7 @@
   <header>
     <nav class="container">
       <a href="#" class="logo">Staff Administration <span>👥💼</span></a>
-      <!-- On larger screens, show full button with text -->
+      <!-- Desktop "Add Staff" Button -->
       <button id="addStaffBtnDesktop" class="btn btn-primary">
         <span class="btn-icon">➕</span>
         <span class="btn-text">Add New Staff 🚀✨</span>
@@ -493,6 +481,7 @@
     </nav>
   </header>
 
+  <!-- Floating Action Button for Mobile -->
   <button id="addStaffBtnMobile" class="btn btn-primary">
     <span class="btn-icon">➕</span>
   </button>
@@ -502,10 +491,10 @@
     <section class="staff">
       <div class="container">
         <h1>Staff Management Dashboard 👥</h1>
-        <!-- Search Bar -->
+        <!-- Modern Search Bar -->
         <div class="header-search">
-          <button id="searchToggleBtn" class="btn search-btn">🔍</button>
           <input type="text" id="searchBar" placeholder="Search..." />
+          <button id="searchToggleBtn" class="search-btn">🔍</button>
         </div>
 
         <table class="staff-table">
@@ -607,24 +596,43 @@
     </div>
   </footer>
 
-  <!-- JavaScript remains mostly unchanged -->
+  <!-- ===============================
+       JavaScript (Backend Logic Unchanged)
+       Additional Changes:
+         1) Hide mobile FAB when add staff modal is open.
+         2) Check subscription staff limit before adding new staff.
+         3) Remove duplicate dashboard heading.
+         4) Modernize the search bar appearance.
+    =============================== -->
   <script type="module">
     import { auth, db, collection, getDocs, updateDoc, deleteDoc, doc, getDoc, setDoc } from './firebase.js';
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
 
-    // Set copyright year
+    // Set current year
     document.getElementById('year').textContent = new Date().getFullYear();
 
     // Wait for auth state
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (!user) {
         window.location.href = 'login.html';
         return;
       }
-
       const currentUserEmail = user.email;
       console.log("User authenticated:", currentUserEmail);
       const staffCollectionRef = collection(db, 'users', currentUserEmail, 'staff');
+
+      // Fetch subscription details to enforce staff limit
+      const userDocRef = doc(db, 'users', currentUserEmail);
+      let allowedStaff = 5; // default for free plan
+      try {
+        const userDocSnap = await getDoc(userDocRef);
+        if (userDocSnap.exists() && userDocSnap.data().subscription) {
+          const plan = userDocSnap.data().subscription.plan;
+          allowedStaff = plan === 'free' ? 5 : (plan === 'silver' ? 20 : 50);
+        }
+      } catch (err) {
+        console.error("Error fetching subscription details:", err);
+      }
 
       // DOM Elements
       const addStaffBtnDesktop = document.getElementById('addStaffBtnDesktop');
@@ -648,25 +656,28 @@
       let isEditing = false;
       let editingId = null;
 
-      // Open Add Staff Modal
+      // Open Add Staff Modal and hide mobile FAB
       function openAddStaffModal() {
         addStaffForm.reset();
         phoneError.style.display = 'none';
         addStaffModal.style.display = 'flex';
+        if (addStaffBtnMobile) addStaffBtnMobile.style.display = 'none';
         isEditing = false;
         editingId = null;
       }
 
       addStaffBtnDesktop.addEventListener('click', openAddStaffModal);
-      addStaffBtnMobile.addEventListener('click', openAddStaffModal);
-      closeModalBtn.addEventListener('click', () => addStaffModal.style.display = 'none');
+      if (addStaffBtnMobile) addStaffBtnMobile.addEventListener('click', openAddStaffModal);
+      closeModalBtn.addEventListener('click', () => {
+        addStaffModal.style.display = 'none';
+        if (addStaffBtnMobile) addStaffBtnMobile.style.display = 'flex';
+      });
 
       // Validate Phone Number
       function validatePhoneNumber(phone) {
         const phoneRegex = /^\d{10}$/;
         return phoneRegex.test(phone);
       }
-
       phoneInput.addEventListener('input', (e) => {
         phoneError.style.display = validatePhoneNumber(e.target.value) ? 'none' : 'block';
       });
@@ -707,9 +718,22 @@
         return Math.max(0, ...ids) + 1;
       }
 
-      // Form Submission
-      addStaffForm.addEventListener('submit', (e) => {
+      // Check Subscription Staff Limit
+      async function checkStaffLimit() {
+        const querySnapshot = await getDocs(staffCollectionRef);
+        const currentCount = querySnapshot.docs.length;
+        if (currentCount >= allowedStaff) {
+          alert(`Staff limit reached for your subscription plan (${allowedStaff} allowed).`);
+          return false;
+        }
+        return true;
+      }
+
+      // Form Submission: Open Save Confirmation Dialog
+      addStaffForm.addEventListener('submit', async (e) => {
         e.preventDefault();
+        const limitOk = await checkStaffLimit();
+        if (!limitOk) return;
         saveConfirmationModal.style.display = 'flex';
       });
 
@@ -745,6 +769,8 @@
             await updateDoc(staffRef, { role, name, phone, email, dob, salaryType, salary: Number(salary) });
             showStatus('Staff updated successfully! 🎉');
           } else {
+            const limitOk = await checkStaffLimit();
+            if (!limitOk) return;
             const nextId = await getNextStaffId();
             await setDoc(doc(staffCollectionRef, nextId.toString()), {
               id: nextId.toString(),
@@ -761,6 +787,7 @@
           await renderStaffTable();
           addStaffModal.style.display = 'none';
           saveConfirmationModal.style.display = 'none';
+          if (addStaffBtnMobile) addStaffBtnMobile.style.display = 'flex';
           isEditing = false;
           editingId = null;
         } catch (error) {
@@ -796,6 +823,7 @@
           editingId = id;
           isEditing = true;
           addStaffModal.style.display = 'flex';
+          if (addStaffBtnMobile) addStaffBtnMobile.style.display = 'none';
         }
       });
 
@@ -819,7 +847,6 @@
         searchBar.classList.toggle('active');
         if (searchBar.classList.contains('active')) searchBar.focus();
       });
-
       searchBar.addEventListener('input', (e) => {
         const searchTerm = e.target.value.toLowerCase();
         const rows = document.querySelectorAll('#staffTableBody tr');
@@ -832,7 +859,6 @@
         });
       });
 
-      // Show Status Messages
       function showStatus(message, type = 'success') {
         const statusEl = document.getElementById('statusMessage');
         statusEl.textContent = message;

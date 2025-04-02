@@ -1,5 +1,5 @@
-// firebase.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-analytics.js";
 import { 
     getAuth, 
     GoogleAuthProvider, 
@@ -22,41 +22,39 @@ import {
     deleteDoc, 
     getDoc, 
     setDoc, 
-    query, 
+    query,
     where 
 } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
+import { 
+    getStorage,  // ✅ Corrected Import
+    getDownloadURL, 
+    ref, 
+    uploadBytes 
+} from "https://www.gstatic.com/firebasejs/11.2.0/firebase-storage.js";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBVmAxvf4Y5pXPJ63HN4MSw5rpsCw3JCZk",
-    authDomain: "pr-app-d3d27.firebaseapp.com",
-    databaseURL: "https://pr-app-d3d27-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "pr-app-d3d27",
-    storageBucket: "pr-app-d3d27.appspot.com", // Fixed typo by removing extra ".app"
-    messagingSenderId: "542335213600",
-    appId: "1:542335213600:web:b60ed1c7215e53d7ef1c45",
-    measurementId: "G-F4821Q4VB6"
-};
-
+    apiKey: "AIzaSyB6Vu3YMDq5Loi3C2CM0v26MuZ1ltcKKMY",
+    authDomain: "pramukhraj-app.firebaseapp.com",
+    projectId: "pramukhraj-app",
+    storageBucket: "pramukhraj-app.firebasestorage.app",
+    messagingSenderId: "126431978069",
+    appId: "1:126431978069:web:93b7988b5855beba86aadc",
+    measurementId: "G-W3EYK0XPGK"
+  };
+  
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const storage = getStorage(app); // ✅ Added Storage
+const analytics = getAnalytics(app);
+
 const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({ prompt: 'select_account' });
 
-// Custom Google Sign-In function
 export const signInWithGoogle = async () => {
     try {
         const result = await signInWithPopup(auth, googleProvider);
-        const user = result.user;
-        const userRef = doc(db, "users", user.email);
-
-        await setDoc(userRef, {
-            email: user.email,
-            name: user.displayName || '',
-            lastLogin: new Date().toISOString()
-        }, { merge: true });
-
         return result;
     } catch (error) {
         console.error("Google Sign-In Error:", error);
@@ -75,6 +73,7 @@ export const getUserRole = async (userEmail) => {
 export { 
     auth, 
     db,
+    storage,  // ✅ Export Storage
     collection,
     addDoc,
     getDocs,
@@ -91,5 +90,8 @@ export {
     where,
     signInWithPhoneNumber,
     RecaptchaVerifier,
-    sendEmailVerification
+    sendEmailVerification,
+    getDownloadURL, 
+    ref, 
+    uploadBytes
 };

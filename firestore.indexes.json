@@ -1,19 +1,4 @@
 {
-  "indexes": [
-    {
-      "collectionGroup": "records",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "date",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "status",
-          "order": "ASCENDING"
-        }
-      ]
-    }
-  ],
+  "indexes": [],
   "fieldOverrides": []
 }

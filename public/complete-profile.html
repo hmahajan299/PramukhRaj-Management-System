@@ -1,12 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="stylesheet" href="./common.css">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Complete Profile - Pramukhraj Electricals</title>
+  <link rel="stylesheet" href="./common.css">
   <style>
-    /* Base styles */
+    /* ------------------------------
+       Saffron Theme Variables
+    ------------------------------ */
+    :root {
+      --primary: #FF9933;       /* Vibrant Saffron */
+      --secondary: #FFA500;     /* Golden Saffron */
+      --accent: #FFD700;        /* Light Gold for contrast */
+      --background: #FFF8E1;    /* Warm Cream */
+      --text-dark: #333;
+      --text-light: #FFFFFF;
+      --border: #FFE5B4;        /* Light Saffron Border */
+      --shadow: rgba(0, 0, 0, 0.08);
+      --primary-hover: #FF8800;
+    }
+
+    /* ------------------------------
+       Base Styles
+    ------------------------------ */
     * {
       margin: 0;
       padding: 0;
@@ -14,22 +31,27 @@
       font-family: 'Segoe UI', system-ui, sans-serif;
     }
     body {
-      background: linear-gradient(to bottom, #fff, #fff5f2);
-      color: #333;
+      /* Changed background to a saffron-inspired gradient */
+      background: linear-gradient(to bottom, var(--background), #fff);
+      color: var(--text-dark);
       line-height: 1.6;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
-    header {
-      background: #fff;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      padding: 10px 0;
-    }
     .container {
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 20px;
+    }
+
+    /* ------------------------------
+       Header & Navigation
+    ------------------------------ */
+    header {
+      background: var(--text-light);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      padding: 10px 0;
     }
     nav {
       display: flex;
@@ -37,43 +59,47 @@
       align-items: center;
     }
     .logo img {
-      width: 150px;
+      width: 80px;
       height: auto;
     }
     .nav-links a {
       margin-left: 15px;
       padding: 8px 16px;
-      border: 2px solid #ddd;
+      border: 2px solid var(--primary);
       border-radius: 6px;
       text-decoration: none;
-      color: #333;
+      color: var(--primary);
+      font-weight: 600;
       transition: all 0.3s ease;
     }
     .nav-links a:hover {
-      border-color: #ff5722;
-      color: #ff5722;
+      border-color: var(--primary-hover);
+      color: var(--primary-hover);
     }
-    /* Profile page styles */
+
+    /* ------------------------------
+       Profile Page Styles
+    ------------------------------ */
     main {
       flex: 1;
     }
-    /* Reduced top padding to minimize gap with header */
     .profile-page {
-      padding: 80px 0 80px;
+      padding: 80px 0;
     }
     .profile-card {
-      background: #fff;
+      background: var(--text-light);
       max-width: 500px;
       margin: 2rem auto;
       padding: 40px;
       border-radius: 12px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 6px var(--shadow);
       position: relative;
     }
     .profile-card h1 {
       margin-bottom: 2rem;
       text-align: center;
-      color: #ff5722;
+      /* Update heading color to saffron primary */
+      color: var(--primary);
     }
     .form-group {
       margin-bottom: 1.5rem;
@@ -82,12 +108,14 @@
       display: block;
       margin-bottom: 0.5rem;
       font-weight: 500;
+      /* Use text-dark variable */
+      color: var(--text-dark);
     }
     .form-group input,
     .form-group textarea {
       width: 100%;
       padding: 12px;
-      border: 2px solid #ddd;
+      border: 2px solid var(--border);
       border-radius: 6px;
       font-size: 16px;
       outline: none;
@@ -95,11 +123,39 @@
     }
     .form-group input:focus,
     .form-group textarea:focus {
-      border-color: #ff5722;
+      border-color: var(--primary);
     }
     .form-group textarea {
       resize: vertical;
     }
+
+    /* ------------------------------
+       Subscription Selection
+    ------------------------------ */
+    .subscription-group {
+      margin-bottom: 1.5rem;
+      padding: 12px;
+      border: 2px solid var(--border);
+      border-radius: 6px;
+    }
+    .subscription-group label {
+      font-weight: 500;
+      margin-bottom: 8px;
+      display: block;
+      color: var(--text-dark);
+    }
+    .subscription-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .subscription-options input {
+      margin-right: 8px;
+    }
+
+    /* ------------------------------
+       Buttons
+    ------------------------------ */
     .btn {
       display: inline-block;
       padding: 12px 24px;
@@ -112,39 +168,42 @@
       margin-top: 1rem;
     }
     .btn-primary {
-      background-color: #ff5722;
-      color: #fff;
+      background-color: var(--primary);
+      color: var(--text-light);
     }
     .btn-primary:hover {
-      background-color: #f4511e;
+      background-color: var(--primary-hover);
     }
-    #error-message {
-      color: red;
-      margin-top: 1rem;
-      font-size: 0.9rem;
-      text-align: center;
-    }
+
+    /* ------------------------------
+       Footer
+    ------------------------------ */
     footer {
-      background: #fff;
+      background: var(--text-light);
       padding: 20px 0;
       text-align: center;
       color: #666;
       border-top: 1px solid #eee;
       margin-top: 2rem;
     }
-    /* Success Overlay Styles */
+
+    /* ------------------------------
+       Success Overlay
+    ------------------------------ */
     #successOverlay {
       display: none;
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      top: 0; 
+      left: 0;
+      width: 100%; 
+      height: 100%;
       background: rgba(0, 0, 0, 0.5);
       z-index: 9999;
       align-items: center;
       justify-content: center;
     }
     .success-message {
-      background: #fff;
+      background: var(--text-light);
       padding: 30px 40px;
       border-radius: 12px;
       text-align: center;
@@ -155,7 +214,7 @@
       margin-bottom: 1rem;
     }
     .success-message p {
-      color: #333;
+      color: var(--text-dark);
     }
     @keyframes fadeIn {
       from {
@@ -167,6 +226,19 @@
         transform: translateY(0);
       }
     }
+    
+    /* ------------------------------
+       Responsive Adjustments
+    ------------------------------ */
+    @media (max-width: 480px) {
+      header { padding: 10px 15px; }
+      .logo img { width: 80px; }
+      .nav-links a { padding: 6px 12px; font-size: 0.9rem; }
+      .profile-card { padding: 20px; max-width: 90%; }
+      .profile-card h1 { font-size: 1.5rem; }
+      .btn { padding: 10px 15px; font-size: 0.9rem; }
+      .form-group input { padding: 8px; font-size: 0.9rem; }
+    }
   </style>
 </head>
 <body>
@@ -177,7 +249,6 @@
       </a>
       <div class="nav-links">
         <a href="feature.html" class="btn btn-outline">Features</a>
-        <a href="#contact" class="btn btn-outline">Contact</a>
       </div>
     </nav>
   </header>
@@ -222,8 +293,26 @@
             <label for="address">Full Address</label>
             <textarea id="address" name="address" placeholder="Enter your full address" rows="4" required></textarea>
           </div>
+          <!-- Subscription Selection Section -->
+          <div class="subscription-group">
+            <label for="subscriptionPlan">Select Subscription Plan</label>
+            <div class="subscription-options">
+              <label>
+                <input type="radio" name="plan" value="free" checked>
+                Free (Up to 5 staff &amp; 1GB storage)
+              </label>
+              <label>
+                <input type="radio" name="plan" value="silver">
+                Silver (Up to 20 staff &amp; 10GB storage) - ₹700/mo
+              </label>
+              <label>
+                <input type="radio" name="plan" value="gold">
+                Gold (Up to 50 staff &amp; 50GB storage) - ₹2,500/mo
+              </label>
+            </div>
+          </div>
           <!-- Submit Button -->
-          <button type="submit" class="btn btn-primary">Save Profile</button>
+          <button type="submit" class="btn btn-primary">Save Profile &amp; Subscription</button>
           <div id="error-message"></div>
         </form>
       </div>
@@ -236,11 +325,10 @@
     </div>
   </footer>
 
-  <!-- Success Overlay -->
   <div id="successOverlay">
     <div class="success-message">
       <h2>Profile Updated!</h2>
-      <p>Your profile details have been saved successfully.</p>
+      <p>Your profile and subscription details have been saved successfully.</p>
     </div>
   </div>
 
@@ -248,14 +336,12 @@
     import { auth, db, doc, setDoc, getDoc } from './firebase.js';
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
 
-    // Set current year in footer
     document.getElementById('year').textContent = new Date().getFullYear();
 
     const profileForm = document.getElementById('profileForm');
     const errorMessageDiv = document.getElementById('error-message');
     const successOverlay = document.getElementById('successOverlay');
 
-    // Helper function: Determines if profile is complete
     function isProfileComplete(data) {
       return data.fullName &&
              data.phone &&
@@ -276,7 +362,6 @@
         const userDocRef = doc(db, 'users', user.email);
         const docSnap = await getDoc(userDocRef);
 
-        // If no document exists, fill in just the email
         if (!docSnap.exists()) {
           document.getElementById('email').value = user.email;
           return;
@@ -284,13 +369,11 @@
 
         const existingData = docSnap.data();
 
-        if (isProfileComplete(existingData)) {
-          // Profile already complete; redirect to dashboard
+        if (isProfileComplete(existingData) && existingData.subscription) {
           window.location.href = '/public/dashboard.html';
           return;
         }
 
-        // Otherwise, pre-fill any available data
         document.getElementById('email').value = user.email;
         if (existingData.fullName) document.getElementById('fullName').value = existingData.fullName;
         if (existingData.phone) document.getElementById('phone').value = existingData.phone;
@@ -298,16 +381,19 @@
         if (existingData.city) document.getElementById('city').value = existingData.city;
         if (existingData.area) document.getElementById('area').value = existingData.area;
         if (existingData.address) document.getElementById('address').value = existingData.address;
+        if (existingData.subscription && existingData.subscription.plan) {
+          const plan = existingData.subscription.plan;
+          document.querySelector(`input[name="plan"][value="${plan}"]`).checked = true;
+        }
       } catch (err) {
         console.error("Error fetching user data:", err);
         errorMessageDiv.textContent = "Failed to load profile data. Please try again.";
       }
     });
 
-    // Handle form submission with additional validations
     profileForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      errorMessageDiv.textContent = "";  // Clear previous errors
+      errorMessageDiv.textContent = "";
 
       const email = document.getElementById('email').value;
       const fullName = document.getElementById('fullName').value.trim();
@@ -316,13 +402,12 @@
       const city = document.getElementById('city').value.trim();
       const area = document.getElementById('area').value.trim();
       const address = document.getElementById('address').value.trim();
+      const selectedPlan = document.querySelector('input[name="plan"]:checked').value;
 
-      // Additional client-side validations
       if (!email) {
         errorMessageDiv.textContent = "Email is required.";
         return;
       }
-      // Validate phone: strip non-digits and ensure 10 digits exist
       const phoneDigits = phone.replace(/\D/g, '');
       if (phoneDigits.length !== 10) {
         errorMessageDiv.textContent = "Please enter a valid 10-digit phone number.";
@@ -332,6 +417,14 @@
         errorMessageDiv.textContent = "City is required.";
         return;
       }
+
+      const subscriptionDetails = {
+        plan: selectedPlan,
+        staffLimit: selectedPlan === 'free' ? 5 : (selectedPlan === 'silver' ? 20 : 50),
+        storage: selectedPlan === 'free' ? 1 : (selectedPlan === 'silver' ? 10 : 50),
+        status: "active",
+        subscribedAt: new Date().toISOString()
+      };
 
       try {
         const user = auth.currentUser;
@@ -343,22 +436,20 @@
         const existingData = docSnap.exists() ? docSnap.data() : {};
 
         await setDoc(userRef, {
-          ...existingData,
           email,
           fullName,
           phone,
           dob,
           city,
           area,
-          address
-        });
+          address,
+          subscription: subscriptionDetails
+        }, { merge: true });
 
-        // Show success overlay
         successOverlay.style.display = 'flex';
         setTimeout(() => {
-          window.location.href = '/public/dashboard.html';
+          window.location.href = './dashboard.html';
         }, 2000);
-
       } catch (error) {
         errorMessageDiv.textContent = error.message.replace('Firebase: ', '');
         console.error("Error saving profile:", error);

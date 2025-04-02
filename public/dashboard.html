@@ -383,12 +383,13 @@
     <div id="userDetails">
       <p>Welcome, <span id="userName"></span>!</p>
       <button class="menu-btn" id="profileBtn">Profile 👤</button>
-      <button class="menu-btn" onclick="window.navigateTo('sub.html')">Subscriptions 📦</button>
+      <button class="menu-btn" id="subcriptionsBtn" onclick="window.navigateTo('sub.html')">Subscriptions 📦</button>
       <button class="menu-btn" id="logoutButton">Logout 🔒</button>
     </div>
   </div>
 
   <div class="dashboard-grid">
+    <div class="card animated" onclick="window.navigateTo('letterpad.html')"><h3>📜 Letterpad</h3></div>    
     <div class="card animated" onclick="window.navigateTo('staff-management.html')"><h3>👥 Staff Management</h3></div>
     <div class="card animated" onclick="window.navigateTo('attendance.html')"><h3>📅 Attendance</h3></div>
     <div class="card animated" onclick="window.navigateTo('account.html')"><h3>💰 Account</h3></div>
@@ -547,6 +548,7 @@
           userDetailsDiv.innerHTML = `
             <p>Welcome, <span id="userName">${userFullName}!</span></p>
             <button class="menu-btn" id="profileBtn">Profile 👤</button>
+            <button class="menu-btn" id="subcriptionsBtn" onclick="window.navigateTo('sub.html')">Subscriptions 📦</button>
             <button class="menu-btn" id="logoutButton">Logout 🔒</button>
           `;
 

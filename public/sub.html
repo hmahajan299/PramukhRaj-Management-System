@@ -2,298 +2,364 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Subscription Plans - Pramukhraj Electricals</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Subscription Details - Pramukhraj Electricals</title>
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    /* CSS Variables for theme colors and styles */
-    :root {
-      --primary-color: #ff5722;
-      --secondary-color: #ff9800;
-      --background-color: #f7f7f7;
-      --card-background: #ffffff;
-      --text-color: #333;
-      --header-bg: linear-gradient(45deg, #ff5722, #ff9800);
-      --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      --card-shadow-hover: 0 6px 12px rgba(0, 0, 0, 0.2);
-      --transition-speed: 0.3s;
-    }
-
-    /* Global Styles */
-    *, *::before, *::after {
+    /* -----------------------------------
+       RESET & BASE STYLES
+    ----------------------------------- */
+    * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-    }
-    html {
-      font-size: 16px;
-      scroll-behavior: smooth;
+      font-family: 'Poppins', sans-serif;
     }
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: var(--background-color);
-      color: var(--text-color);
+      margin: 0; /* Remove default margin so header fills the top */
+      background: linear-gradient(135deg, #FFF8E1, #fff3e0);
+      color: #333;
       line-height: 1.6;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-    a {
-      text-decoration: none;
-      color: inherit;
     }
 
-    /* Header */
+    /* -----------------------------------
+       HEADER
+    ----------------------------------- */
     header {
-      background: var(--header-bg);
-      color: #fff;
-      padding: 1rem;
-      text-align: center;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-    }
-    header h1 {
-      font-size: 2rem;
-      font-weight: 600;
-    }
-
-    /* Main Content */
-    main {
-      flex: 1;
-      padding: 2rem 1rem;
-      max-width: 1200px;
-      margin: 0 auto;
+      position: fixed;
+      top: 0;
       width: 100%;
-    }
-    
-    /* Coupon Section Styled as a Box */
-    .coupon-container {
-      text-align: center;
-      padding: 1.5rem;
-      background: var(--card-background);
-      border: 2px solid #ddd;
-      border-radius: 0.5rem;
-      box-shadow: var(--card-shadow);
-      width: 500px;
-      max-width: 90%;
-      margin: 0 auto 2rem auto;
-    }
-    .coupon-container h3 {
-      margin-bottom: 1rem;
-      font-size: 1.25rem;
-      color: var(--primary-color);
-    }
-    .coupon-input-group {
+      z-index: 999;
       display: flex;
       align-items: center;
+      justify-content: space-between; /* title on left, arrow on right */
+      background: linear-gradient(90deg, #FF6F00, #FFB74D); /* saffron gradient */
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      backdrop-filter: blur(6px);
+      padding: 0.75rem 1rem; 
+    }
+    header h1 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    /* 
+      Triple-span arrow on the right
+      using your original style & animation,
+      pointing right for "Back" or "Next" style.
+      If you want it pointing left, remove rotate(90deg).
+    */
+    .arrow {
+      cursor: pointer;
+      transform: rotate(90deg); /* points arrow to the right */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       justify-content: center;
-      gap: 1rem;
-      flex-wrap: wrap;
     }
-    .coupon-container input[type="text"] {
-      flex: 1;
-      min-width: 200px;
-      padding: 0.75rem;
-      border: 1px solid #ccc;
-      border-radius: 0.375rem;
-      font-size: 1rem;
-      transition: border-color var(--transition-speed) ease;
+    .arrow span {
+      display: block;
+      width: 1.2rem;
+      height: 1.2rem;
+      border-bottom: 3px solid #fff;
+      border-right: 3px solid #fff;
+      transform: rotate(45deg);
+      margin: -6px;
+      animation: animate 2s infinite;
     }
-    .coupon-container input[type="text"]:focus {
-      outline: none;
-      border-color: var(--primary-color);
+    .arrow span:nth-child(2) {
+      animation-delay: -0.2s;
     }
-    .coupon-container button {
-      padding: 0.75rem 1.25rem;
-      border: none;
-      background-color: var(--primary-color);
-      color: #fff;
-      border-radius: 0.375rem;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background-color var(--transition-speed) ease;
+    .arrow span:nth-child(3) {
+      animation-delay: -0.4s;
     }
-    .coupon-container button:hover {
-      background-color: var(--secondary-color);
-    }
-
-    /* Subscription Grid */
-    .subscription-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-    }
-    .subscription-card {
-      background: var(--card-background);
-      border-radius: 0.5rem;
-      padding: 1.5rem;
-      text-align: center;
-      box-shadow: var(--card-shadow);
-      transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
-    }
-    .subscription-card:hover {
-      transform: translateY(-5px) scale(1.02);
-      box-shadow: var(--card-shadow-hover);
-    }
-    .subscription-card h2 {
-      font-size: 1.5rem;
-      margin-bottom: 0.75rem;
-      color: var(--primary-color);
-    }
-    .subscription-price {
-      font-size: 2rem;
-      font-weight: bold;
-      color: var(--secondary-color);
-      margin-bottom: 1rem;
-    }
-    .subscription-card p {
-      font-size: 1rem;
-      margin-bottom: 1.5rem;
-    }
-    .btn {
-      background-color: var(--primary-color);
-      color: #fff;
-      border: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: 0.375rem;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background-color var(--transition-speed) ease;
-    }
-    .btn:hover {
-      background-color: var(--secondary-color);
+    @keyframes animate {
+      0% {
+        opacity: 0;
+        transform: rotate(45deg) translate(-10px, -10px);
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+        transform: rotate(45deg) translate(10px, 10px);
+      }
     }
 
-    /* Footer */
+    /* -----------------------------------
+       MAIN CONTENT & FOOTER
+    ----------------------------------- */
+    main {
+      padding: 2rem 1rem;
+      margin-top: 70px; /* space for the fixed header */
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
     footer {
-      background: #333;
-      color: #fff;
       text-align: center;
       padding: 1rem;
-      font-size: 0.875rem;
+      color: #666;
+      margin-top: 2rem;
+    }
+    footer span {
+      color: #333;
     }
 
-    /* Responsive Adjustments */
-    @media (max-width: 600px) {
+    /* -----------------------------------
+       SUBSCRIPTION DETAILS CARD
+    ----------------------------------- */
+    .subscription-details {
+      background: #fff;
+      border: 2px solid #ffdca8;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      padding: 1.5rem;
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .subscription-details h2 {
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+      color: #FF6F00; /* saffron-dark */
+    }
+    .subscription-details p {
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+    }
+
+    /* -----------------------------------
+       PROGRESS BARS
+    ----------------------------------- */
+    .usage-bar {
+      margin: 1rem 0;
+      text-align: left;
+    }
+    .usage-bar p {
+      margin-bottom: 0.25rem;
+      font-size: 0.9rem;
+    }
+    .progress {
+      width: 100%;
+      background-color: #eee;
+      border-radius: 10px;
+      overflow: hidden;
+      height: 12px;
+    }
+    .progress-bar {
+      height: 100%;
+      background-color: #FF6F00;
+      width: 0;
+      transition: width 0.3s ease;
+    }
+
+    /* -----------------------------------
+       BUTTON STYLES
+    ----------------------------------- */
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.25rem;
+      border: none;
+      background: #FF6F00;
+      color: #fff;
+      border-radius: 0.375rem;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      margin-top: 1rem;
+    }
+    .btn:hover {
+      background: #FFB74D;
+    }
+
+    /* -----------------------------------
+       RESPONSIVE
+    ----------------------------------- */
+    @media (max-width: 768px) {
       header h1 {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
       }
-      .subscription-card h2 {
-        font-size: 1.25rem;
+      .arrow span {
+        width: 1rem;
+        height: 1rem;
+        margin: -5px;
       }
-      .subscription-price {
-        font-size: 1.75rem;
+      main {
+        margin-top: 60px;
+        padding: 1rem;
       }
-      .subscription-card p {
-        font-size: 0.9rem;
+      .subscription-details {
+        padding: 1rem;
+        margin: 0 1rem;
       }
       .btn {
-        font-size: 0.9rem;
-        padding: 0.65rem 1.25rem;
-      }
-      .coupon-container {
-        width: 90%;
-      }
-      .coupon-container input[type="text"] {
         width: 100%;
-        margin-bottom: 1rem;
-      }
-      .coupon-container button {
-        width: 100%;
-        margin: 0;
+        margin-top: 0.5rem;
       }
     }
+    .arrow {
+      cursor: pointer;
+      transform: rotate(90deg); /* Points the arrow to the right; change or remove rotation if needed */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .arrow span {
+      display: block;
+      width: 1.2rem;
+      height: 1.2rem;
+      border-bottom: 3px solid #fff;
+      border-right: 3px solid #fff;
+      transform: rotate(45deg);
+      margin: -6px;
+      animation: animate 2s infinite;
+    }
+
+    .arrow span:nth-child(2) {
+      animation-delay: -0.2s;
+    }
+
+    .arrow span:nth-child(3) {
+      animation-delay: -0.4s;
+    }
+
+    @keyframes animate {
+      0% {
+        opacity: 0;
+        transform: rotate(45deg) translate(-10px, -10px);
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+        transform: rotate(45deg) translate(10px, 10px);
+      }
+    }
+
   </style>
 </head>
 <body>
   <header>
-    <h1>Subscription Plans</h1>
+    <!-- Heading on the left -->
+    <h1>Subscription Details</h1>
+    <!-- Arrow on the right corner -->
+    <div class="arrow" id="arrowBtn">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
   </header>
+
   <main>
-    <!-- Coupon Container as a Box -->
-    <section class="coupon-container" aria-label="Apply Coupon">
-      <h3>Have a Coupon?</h3>
-      <div class="coupon-input-group">
-        <input type="text" placeholder="Enter coupon code" id="couponInput" aria-label="Coupon Code">
-        <button type="button" onclick="applyCoupon()">Apply Coupon</button>
-      </div>
-    </section>
-    <!-- Subscription Grid -->
-    <section class="subscription-grid" aria-label="Subscription Plans">
-      <article class="subscription-card">
-        <h2>Free Plan</h2>
-        <div class="subscription-price">$0/mo</div>
-        <p>Get started with limited features. Perfect for trying out our service.</p>
-        <button class="btn" type="button" onclick="subscribeFree()">Select Free Plan</button>
-      </article>      
-      <article class="subscription-card">
-        <h2>Basic Plan</h2>
-        <div class="subscription-price">$4.99/mo</div>
-        <p>Access to basic features and limited content.</p>
-        <button class="btn" type="button">Subscribe Now</button>
-      </article>
-      <article class="subscription-card">
-        <h2>Premium Plan</h2>
-        <div class="subscription-price">$9.99/mo</div>
-        <p>Unlock all premium features with unlimited access.</p>
-        <button class="btn" type="button">Subscribe Now</button>
-      </article>
-      <article class="subscription-card">
-        <h2>VIP Plan</h2>
-        <div class="subscription-price">$14.99/mo</div>
-        <p>All benefits of Premium plus exclusive offers.</p>
-        <button class="btn" type="button">Subscribe Now</button>
-      </article>
-    </section>
+    <div class="subscription-details" id="subscriptionDetails">
+      <p>Loading subscription details...</p>
+    </div>
+    <div style="text-align: center; margin-top: 1rem;">
+      <button class="btn" id="changePlanBtn">Change Subscription</button>
+    </div>
   </main>
+
   <footer>
     &copy; <span id="year"></span> Pramukhraj Electricals. All rights reserved.
   </footer>
-  
-  <script type="module"> 
-    import { auth, db, doc, setDoc, getDoc } from './firebase.js';
+
+  <script type="module">
+    import { auth, db, doc, getDoc, collection, getDocs } from './firebase.js';
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
-      // On page load, check if user is logged in and if they already have a subscription.
-      onAuthStateChanged(auth, async (user) => {
-        if (!user) {
-          window.location.href = 'login.html';
-          return;
-        }
+
+    // Set the current year in the footer
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Arrow -> Back to Dashboard
+    document.getElementById('arrowBtn').addEventListener('click', () => {
+      window.location.href = 'dashboard.html';
+    });
+
+    // "Change Subscription" button -> complete-profile page
+    document.getElementById('changePlanBtn').addEventListener('click', () => {
+      window.location.href = 'complete-profile.html';
+    });
+
+    // On authentication state change, fetch subscription details + staff count
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = 'login.html';
+        return;
+      }
+      try {
+        // 1) Fetch subscription data
         const userDocRef = doc(db, 'users', user.email);
         const docSnap = await getDoc(userDocRef);
-        if (docSnap.exists() && docSnap.data().subscription) {
-          // Subscription already exists, redirect to dashboard.
-          window.location.href = 'dashboard.html';
-        }
-      });
-      
-      async function subscribePlan(plan) {
-        const user = auth.currentUser;
-        if (!user) return;
-        const userDocRef = doc(db, 'users', user.email);
-        // Save the chosen subscription plan in Firestore (merging with any existing data)
-        await setDoc(userDocRef, { subscription: plan }, { merge: true });
-        // Optional: You could show an animation or toast here instead of alert
-        alert("You have subscribed to the " + plan.toUpperCase() + " plan!");
-        window.location.href = 'dashboard.html';
-      }
-      // Set the current year in the footer
-    document.getElementById('year').textContent = new Date().getFullYear();
-    
-    function applyCoupon() {
-      const coupon = document.getElementById('couponInput').value;
-      if (coupon.trim() !== "") {
-        alert("Coupon '" + coupon + "' applied!");
-      } else {
-        alert("Please enter a valid coupon code.");
-      }
-    }
-    function subscribeFree() {
-      // Simulate saving the subscription plan to local storage
-      localStorage.setItem("subscriptionPlan", "free");
-      alert("You have subscribed to the Free Plan!");
-      // Redirect to the dashboard
-      window.location.href = './dashboard.html';
-    }
 
+        // 2) Also fetch staff from subcollection 'staff'
+        const staffCollRef = collection(db, 'users', user.email, 'staff');
+        const staffSnap = await getDocs(staffCollRef);
+        const staffCount = staffSnap.size; // number of staff docs
+
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          if (data.subscription) {
+            const plan = data.subscription.plan || 'N/A';
+            const staffLimit = data.subscription.staffLimit || 'N/A';
+            const storageLimit = data.subscription.storage || 'N/A';
+            // Storage usage can still come from your doc, or you can also fetch from elsewhere if needed
+            const currentStorageUsage = data.subscription.currentStorageUsage || 0;
+
+            // Staff usage = staffCount from the subcollection
+            const currentStaffUsage = staffCount;
+
+            // Calculate usage percentages
+            const staffUsagePercent = (staffLimit !== 'N/A' && staffLimit > 0)
+              ? Math.min((currentStaffUsage / staffLimit) * 100, 100)
+              : 0;
+            const storageUsagePercent = (storageLimit !== 'N/A' && storageLimit > 0)
+              ? Math.min((currentStorageUsage / storageLimit) * 100, 100)
+              : 0;
+
+            document.getElementById('subscriptionDetails').innerHTML = `
+              <h2>Your Plan: ${plan.toUpperCase()}</h2>
+              <p><strong>Staff Limit:</strong> ${staffLimit} staff members</p>
+              <div class="usage-bar">
+                <p>Staff Used: ${currentStaffUsage}</p>
+                <div class="progress">
+                  <div class="progress-bar" style="width: ${staffUsagePercent}%;"></div>
+                </div>
+              </div>
+              <p><strong>Storage Limit:</strong> ${storageLimit} GB</p>
+              <div class="usage-bar">
+                <p>Storage Used: ${currentStorageUsage} GB</p>
+                <div class="progress">
+                  <div class="progress-bar" style="width: ${storageUsagePercent}%;"></div>
+                </div>
+              </div>
+            `;
+          } else {
+            document.getElementById('subscriptionDetails').innerHTML = `
+              <h2>No Subscription Found</h2>
+              <p>Please select a subscription in your profile.</p>
+            `;
+          }
+        } else {
+          document.getElementById('subscriptionDetails').innerHTML = `
+            <h2>No User Data Found</h2>
+            <p>Please complete your profile.</p>
+          `;
+        }
+      } catch (error) {
+        console.error("Error fetching subscription details or staff data:", error);
+        document.getElementById('subscriptionDetails').innerHTML = `
+          <h2>Error</h2>
+          <p>Could not load subscription details. Please try again later.</p>
+        `;
+      }
+    });
   </script>
 </body>
 </html>

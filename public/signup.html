@@ -5,13 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sign Up - Pramukhraj Electricals</title>
   <style>
-  
-    /* Base styles */
+    :root {
+      --primary: #FF9933;         /* Vibrant Saffron */
+      --secondary: #FFA500;       /* Golden Saffron */
+      --accent: #FFD700;          /* Light Gold for contrast */
+      --background: #FFF8E1;      /* Warm Cream */
+      --text-dark: #333;
+      --text-light: #FFFFFF;
+      --border: #FFE5B4;          /* Light Saffron Border */
+      --shadow: rgba(0, 0, 0, 0.08);
+      --primary-hover: #FF8800;
+     }
+
+    /* Reset & Base Styles */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
       font-family: 'Segoe UI', system-ui, sans-serif;
+      scroll-behavior: smooth;
+    }
+    body {
+      background: var(--background); /* Use the warm cream background */
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between; /* Changed from space-around to space-between to align items better */
+      align-items: center;
+      color: var(--text-dark);
     }
     .container {
       max-width: 1200px;
@@ -19,21 +40,21 @@
       padding: 0 20px;
     }
     header {
-      background: white;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      position: fixed;
       width: 100%;
-      top: 0;
-      z-index: 1000;
       padding: 10px 20px;
+      background: var(--text-light);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       display: flex;
       justify-content: space-between;
       align-items: center;
+      position: fixed;
     }
     .logo img {
-      width: 150px;
+      width: 80px;
       height: auto;
+      transition: transform 0.3s ease;
     }
+    .logo img:hover { transform: scale(1.05); }
     .nav-links a {
       text-decoration: none;
       color: #ff5722;
@@ -49,52 +70,66 @@
       color: #fff;
     }
     .auth-page {
-      padding: 140px 0 80px;
-      background: linear-gradient(to bottom, #fff, #fff5f2);
+      padding: 140px 0px 80px; /* Add some padding to the sides */
+      background: transparent; /* Make the auth-page background transparent */
       min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%; /* Make auth-page take full width */
     }
     .auth-card {
       background: white;
-      max-width: 440px;
+      max-width: 440px; /* Increased the max-width to make the box wider */
       margin: 2rem auto;
       padding: 40px;
       border-radius: 12px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 100%; /* Ensure it doesn't exceed the viewport on smaller screens */
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     .auth-card h1 {
       margin-bottom: 2rem;
       text-align: center;
       color: #ff5722;
+      font-size: 1.8rem;
     }
     .form-group {
       margin-bottom: 1.5rem;
+      /* text-align: left; */
     }
     .form-group label {
       display: block;
       margin-bottom: 0.5rem;
       font-weight: 500;
+      color: #555;
     }
     .form-group input {
       width: 100%;
       padding: 10px;
-      border: 2px solid #ffa152;
+      border: 2px solid #ddd;
       border-radius: 6px;
-      font-size: 16px;
-      outline: none;
-      transition: border-color 0.3s ease-in-out;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
     }
-    input:focus {
-      border-color: #ff6600;
-      box-shadow: 0 0 8px rgba(255, 102, 0, 0.5);
+    .form-group input:focus {
+      border-color: #ff5722;
+      outline: none;
     }
     .btn {
-      display: inline-block;
-      padding: 12px 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 20px;
       border-radius: 6px;
       font-weight: 600;
       cursor: pointer;
       border: none;
-      transition: background 0.3s ease;
+      transition: background 0.3s ease, transform 0.2s ease;
       width: 100%;
       margin-top: 1rem;
     }
@@ -104,6 +139,7 @@
     }
     .btn-primary:hover {
       background-color: #f4511e;
+      transform: translateY(-2px);
     }
     .auth-footer {
       text-align: center;
@@ -122,6 +158,8 @@
       color: #666;
       border-top: 1px solid #eee;
       margin-top: 2rem;
+      width: 100%;
+      box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
     }
     .error-message {
       color: #dc3545;
@@ -206,8 +244,7 @@
       <a href="index.html"><img src="assets/logo.png" alt="Pramukhraj Electricals Logo"></a>
     </div>
     <div class="nav-links">
-      <a href="login.html" class="btn btn-outline">Login</a>
-      <a href="#contact" class="btn btn-outline">Contact</a>
+      <a href="login.html" class="btn btn-outline">Login </a>
     </div>
   </header>
 
@@ -247,7 +284,6 @@
     </div>
   </main>
 
-  <!-- Popup for Email Verification Message -->
   <div class="overlay" id="popupOverlay"></div>
   <div class="popup" id="verificationPopup">
     <p>Please verify your email before logging in.</p>
@@ -263,7 +299,7 @@
   <script type="module">
     // signup.html (modified)
 
-import { 
+import {
   auth,
   db,
   doc,

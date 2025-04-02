@@ -4,6 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login - Pramukhraj Electricals</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" 
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" 
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  
   <script type="importmap">
     {
       "imports": {
@@ -11,38 +18,49 @@
       }
     }
   </script>
-  <script src="https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js" defer></script>
-  <script src="https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js" defer></script>
-  <script src="https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js" defer></script>
+
   <style>
+    :root {
+      --primary: #FF9933;         /* Vibrant Saffron */
+      --secondary: #FFA500;       /* Golden Saffron */
+      --accent: #FFD700;          /* Light Gold for contrast */
+      --background: #FFF8E1;      /* Warm Cream */
+      --text-dark: #333;
+      --text-light: #FFFFFF;
+      --border: #FFE5B4;          /* Light Saffron Border */
+      --shadow: rgba(0, 0, 0, 0.08);
+      --primary-hover: #FF8800;
+     }
     /* Reset & Base Styles */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
       font-family: 'Segoe UI', system-ui, sans-serif;
+      scroll-behavior: smooth;
     }
     body {
-      background: #f5f5f5;
+      background: var(--background);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
+      color: var(--text-dark)
     }
 
     /* Header */
     header {
       width: 100%;
       padding: 15px 20px;
-      background: #fff;
+      background: var(--text-light);
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
     .logo img {
-      width: 120px;
+      width: 80px;
       height: auto;
       transition: transform 0.3s ease;
     }
@@ -241,7 +259,7 @@
         </div>
         <div class="form-group">
           <label for="manualPassword">Password</label>
-          <input type="password" id="manualPassword" name="password" placeholder="Enter your password" required>
+          <input type="password" id="manualPassword" name="password" placeholder="Enter your password" required autocomplete="current-password">
         </div>
         <button type="submit" class="btn btn-primary" id="signInBtn">
           <span class="btn-text">Sign In</span>
@@ -272,7 +290,7 @@
     const errorMessage = document.getElementById('error-message');
 
     // Utility Functions
-    function displayError(message) {
+    function displayError(message){
       errorMessage.textContent = message;
       errorMessage.style.display = 'block';
       setTimeout(() => errorMessage.style.display = 'none', 5000);

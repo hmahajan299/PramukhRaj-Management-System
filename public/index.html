@@ -1,309 +1,710 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pramukhraj Electricals</title>
-    <style>
-        /* Reset and base styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, sans-serif;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pramukhraj Electricals</title>
+  <!-- Using HTTPS with integrity for Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" 
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" 
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- For production, consider moving CSS into an external stylesheet -->
+  <style>
+    /* ===============================
+       Saffron Theme Variables
+    ================================ */
+    :root {
+      --primary: #FF9933;         /* Vibrant Saffron */
+      --secondary: #FFA500;       /* Golden Saffron */
+      --accent: #FFD700;          /* Light Gold for contrast */
+      --background: #FFF8E1;      /* Warm Cream */
+      --text-dark: #333;
+      --text-light: #FFFFFF;
+      --border: #FFE5B4;          /* Light Saffron Border */
+      --shadow: rgba(0, 0, 0, 0.08);
+      --primary-hover: #FF8800;
+      --secondary-hover: #FF8C00;
+      --accent-hover: #FFCC00;
+      --bar-bg: #212529;          /* For hamburger bars */
+    }
 
-        /* Utility classes */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
+    /* ===============================
+       Reset & Base Styles
+    ================================ */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Roboto', 'Segoe UI', system-ui, sans-serif;
+      scroll-behavior: smooth;
+    }
+    body {
+      line-height: 1.7;
+      color: var(--text-dark);
+      background-color: var(--background);
+      overflow-x: hidden;
+      perspective: 1000px;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 30px;
+    }
 
-        .btn {
-            display: inline-block;
-            padding: 12px 24px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: none;
-        }
+    /* ===============================
+       Header & Navigation
+    ================================ */
+    header {
+      background: var(--text-light);
+      box-shadow: 0 2px 8px var(--shadow);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      padding: 10px 0;
+    }
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+    }
+    .logo img {
+      max-height: 80px; /* Default mobile logo height */
+      width: auto;
+    }
+    /* Responsive logo for larger screens */
+    @media (min-width: 992px) {
+      .logo img { max-height: 70px; }
+    }
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 30px;
+    }
+    .nav-links li a {
+      text-decoration: none;
+      color: var(--text-dark);
+      font-weight: 500;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      padding: 8px 12px;
+      border-radius: 4px;
+    }
+    .nav-links li a:hover,
+    .nav-links li a:focus {
+      color: #ff5722;
+      background-color: var(--background);
+    }
 
-        .btn-primary {
-            background-color: #ff5722;
-            color: white;
-        }
+    /* Hamburger Menu Icon for Mobile */
+    .menu-icon {
+      position: relative;
+      width: 50px;
+      height: 50px;
+      cursor: pointer;
+      display: none; /* Hidden on larger screens */
+      margin-left: auto;
+    }
+    .menu-icon__checkbox {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      z-index: 2;
+      opacity: 0;
+      cursor: pointer;
+    }
+    .menu-icon > div {
+      margin: auto;
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      bottom: 0;
+      width: 22px;
+      height: 12px;
+    }
+    .menu-icon span {
+      position: absolute;
+      display: block;
+      width: 100%;
+      height: 2px;
+      background-color: var(--bar-bg);
+      border-radius: 1px;
+      transition: all 0.2s cubic-bezier(0.1, 0.82, 0.76, 0.965);
+    }
+    .menu-icon span:first-of-type { top: 0; }
+    .menu-icon span:last-of-type { bottom: 0; }
+    .menu-icon__checkbox:checked + div span:first-of-type {
+      transform: rotate(45deg);
+      top: 5px;
+    }
+    .menu-icon__checkbox:checked + div span:last-of-type {
+      transform: rotate(-45deg);
+      bottom: 5px;
+    }
+    @media (min-width: 1024px) {
+      .menu-icon:hover .menu-icon__checkbox:not(:checked) + div span:first-of-type {
+        width: 26px;
+      }
+      .menu-icon:hover .menu-icon__checkbox:not(:checked) + div span:last-of-type {
+        width: 12px;
+      }
+      .menu-icon:hover .menu-icon__checkbox:checked + div span {
+        width: 22px;
+      }
+    }
+    /* Mobile Dropdown Menu */
+    .mobile-menu {
+      display: none;
+      position: absolute;
+      top: 70px;
+      right: 30px;
+      background: var(--text-light);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px;
+      box-shadow: 0 2px 5px var(--shadow);
+      z-index: 999;
+      width: 200px;
+      /* Remove bullet points in mobile menu */
+      list-style: none;
+      padding-left: 0;
+    }
+    .mobile-menu li { margin: 10px 0; }
+    .mobile-menu li a {
+      display: block;
+      color: var(--text-dark);
+      padding: 8px 12px;
+      text-decoration: none;
+      font-weight: 500;
+      border-radius: 4px;
+    }
+    .mobile-menu li a:hover,
+    .mobile-menu li a:focus {
+      background-color: var(--background);
+      color: var(--primary);
+    }
 
-        .btn-primary:hover {
-            background-color: #f4511e;
-            transform: translateY(-2px);
-        }
+    /* ===============================
+       Hero Section
+    ================================ */
+    .hero {
+      position: relative;
+      padding: 160px 30px 100px;
+      text-align: center;
+      background-color: var(--primary);
+      background-image: url('assets/hero-bg.jpg');
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      color: var(--text-light);
+      transform-style: preserve-3d;
+      transition: transform 0.1s ease-out;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.3);
+      z-index: 1;
+    }
+    .hero .container {
+      position: relative;
+      z-index: 2;
+    }
+    .hero h1 {
+      font-size: 52px;
+      margin-bottom: 25px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+    .hero p {
+      font-size: 22px;
+      margin-bottom: 40px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .button-group {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
 
-        .btn-outline {
-            background-color: white;
-            color: #333;
-            border: 2px solid #ddd;
-        }
+    /* ===============================
+       Buttons
+    ================================ */
+    .btn {
+      display: inline-block;
+      padding: 14px 28px;
+      min-width: 130px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease-in-out;
+      text-align: center;
+      box-shadow: 0 2px 5px var(--shadow);
+    }
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--text-light);
+    }
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px var(--shadow);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+    .btn-outline:hover {
+      background-color: var(--primary);
+      color: var(--text-light);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px var(--shadow);
+    }
 
-        .btn-outline:hover {
-            border-color: #ff5722;
-            color: #ff5722;
-        }
+    /* ===============================
+       Sections (Features, Testimonials, Pricing, Contact)
+    ================================ */
+    section {
+      padding: 90px 0;
+      background-color: var(--text-light);
+      border-bottom: 1px solid var(--border);
+    }
+    section:nth-of-type(even) { background-color: var(--background); }
+    section:last-of-type { border-bottom: none; }
+    section h2 {
+      text-align: center;
+      font-size: 40px;
+      margin-bottom: 60px;
+      color: var(--primary);
+      position: relative;
+      padding-bottom: 15px;
+    }
+    section h2::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+      height: 3px;
+      width: 80px;
+      background-color: var(--secondary);
+    }
 
-        /* Header styles */
-        header {
-            background: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-        }
+    /* Features Grid */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+      padding: 0 30px;
+    }
+    .feature-card {
+      background: var(--text-light);
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px var(--shadow);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border-left: 6px solid var(--secondary);
+    }
+    .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 8px 16px var(--shadow);
+      border-left-color: var(--primary);
+    }
+    .feature-card h3 {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 15px;
+      color: var(--text-dark);
+    }
+    .feature-card h3 i { color: var(--primary); font-size: 1.2em; }
+    .feature-card p { color: var(--text-dark); }
 
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 70px;
-        }
+    /* Testimonials */
+    .testimonials {
+      background: var(--secondary);
+      padding: 90px 30px;
+      color: var(--text-light);
+    }
+    .testimonials h2 { color: #FFFFFF; }
+    .testimonial-item {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      margin: 20px;
+      border-top: 5px solid var(--primary);
+      color: var(--text-dark);
+    }
+    .testimonial-item p {
+      font-style: italic;
+      margin-bottom: 15px;
+      line-height: 1.8;
+    }
+    .testimonial-item span {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+      color: var(--primary);
+    }
 
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: #333;
-            text-decoration: none;
-        }
+    /* Pricing Cards */
+    .pricing-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      padding: 0 30px;
+    }
+    .pricing-card {
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      padding: 30px;
+      text-align: center;
+      background: var(--text-light);
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+    .pricing-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--primary);
+      box-shadow: 0 8px 16px var(--shadow);
+    }
+    .pricing-card h3 {
+      margin-bottom: 20px;
+      font-size: 28px;
+      color: var(--primary);
+    }
+    .pricing-card p {
+      font-size: 30px;
+      margin-bottom: 20px;
+      color: var(--secondary);
+      font-weight: bold;
+    }
+    .pricing-card ul {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 25px;
+    }
+    .pricing-card ul li {
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .pricing-card ul li:last-child { border-bottom: none; }
+    .pricing-card .btn { width: 100%; }
 
-        /* Hero section */
-        .hero {
-            padding: 140px 20px 80px;
-            text-align: center;
-            background: linear-gradient(to bottom, #fff, #fff5f2);
-        }
+    /* Contact Section */
+    .contact {
+      background: var(--background);
+      padding: 80px 30px;
+      text-align: center;
+    }
+    .contact p {
+      max-width: 700px;
+      margin: 0 auto 30px;
+      color: var(--text-dark);
+    }
+    .contact form {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 30px;
+      background: var(--text-light);
+      border-radius: 10px;
+      box-shadow: 0 4px 8px var(--shadow);
+      text-align: left;
+    }
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 0.75rem;
+      font-weight: 500;
+      color: var(--text-dark);
+    }
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      transition: border-color 0.3s ease;
+      font-size: 1rem;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: var(--primary);
+      outline: none;
+      box-shadow: 0 0 0 0.2rem rgba(255,153,51,0.25);
+    }
 
-        .hero h1 {
-            font-size: 48px;
-            margin-bottom: 20px;
-            background: linear-gradient(45deg, #ff5722, #ff7043);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+    /* Footer */
+    footer {
+      background: var(--text-light);
+      padding: 30px 0;
+      text-align: center;
+      color: var(--text-dark);
+      border-top: 1px solid var(--border);
+    }
 
-        .hero p {
-            font-size: 20px;
-            color: #666;
-            margin-bottom: 30px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
+    /* ===============================
+       Animations
+    ================================ */
+    .animate {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease-out;
+    }
+    .animate.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
-        .button-group {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-            margin-top: 32px;
-        }
-
-        /* Features section */
-        .features {
-            padding: 80px 0;
-        }
-
-        .features h2 {
-            text-align: center;
-            font-size: 36px;
-            margin-bottom: 50px;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 24px;
-            padding: 0 20px;
-        }
-
-        .feature-card {
-            background: white;
-            padding: 24px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-
-        .feature-card h3 {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: #333;
-        }
-
-        .feature-card h3::before {
-            content: "✓";
-            color: #ff5722;
-            font-weight: bold;
-        }
-
-        /* CTA Section */
-        .cta {
-            background-color: #ff5722;
-            color: white;
-            padding: 80px 20px;
-            text-align: center;
-        }
-
-        .cta h2 {
-            font-size: 36px;
-            margin-bottom: 20px;
-        }
-
-        .cta p {
-            font-size: 18px;
-            margin-bottom: 30px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* Footer */
-        footer {
-            background: white;
-            padding: 20px;
-            text-align: center;
-            color: #666;
-            border-top: 1px solid #eee;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 36px;
-            }
-
-            .hero p {
-                font-size: 18px;
-            }
-
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .button-group {
-                flex-direction: column;
-                align-items: center;
-            }
-        }
-    </style>
+    /* ===============================
+       Responsive Styles
+    ================================ */
+    @media (max-width: 992px) {
+      .container { padding: 0 20px; }
+      .nav-links { gap: 20px; }
+      .nav-links li a { padding: 6px 10px; }
+      .logo img { max-height: 70px; }
+      .hero { padding: 140px 20px 80px; }
+      .hero h1 { font-size: 44px; }
+      .hero p { font-size: 20px; }
+      section { padding: 70px 0; }
+      section h2 { font-size: 36px; margin-bottom: 50px; }
+      .features-grid, .pricing-cards { padding: 0 20px; }
+    }
+    @media (max-width: 768px) {
+      /* Hide standard nav; show hamburger & mobile menu */
+      .nav-links { display: none; }
+      .menu-icon { display: block; }
+      .mobile-menu { display: none; }
+      .features-grid, .pricing-cards { grid-template-columns: 1fr; }
+      .button-group { flex-direction: column; align-items: center; gap: 15px; }
+      section { padding: 60px 0; }
+      section h2 { font-size: 32px; margin-bottom: 40px; }
+    }
+    @media (max-width: 576px) {
+      .hero h1 { font-size: 36px; }
+      .hero p { font-size: 18px; }
+      .btn { width: 100%; padding: 16px 24px; }
+      .logo img { max-height: 70px; }
+      .contact form { padding: 20px; }
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <nav class="container">
-            <a href="index.html" class="logo">
-                <img src="assets/logo.png" alt="Pramukhraj Electricals Logo" width="150" height="50">
-            </a>
-            <a href="feature.html" class="btn btn-primary">Features</a>
-        </nav>
-    </header>
-
-    <main>
-        <!-- Hero Section -->
-        <section class="hero">
-            <div class="container">
-                <h1>Pramukhraj Electricals</h1>
-                <p>Streamline your electrical services business with our comprehensive management solution</p>
-                <div class="button-group">
-                    <a href="signup.html" class="btn btn-primary">Get Started</a>
-                    <a href="login.html" class="btn btn-outline">Sign In</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Features Section -->
-        <section class="features">
-            <div class="container">
-                <h2>Powerful Features for Your Business</h2>
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <h3>Staff Attendance Tracking by Site</h3>
-                    </div>
-                    <div class="feature-card">
-                        <h3>Financial Management System</h3>
-                    </div>
-                    <div class="feature-card">
-                        <h3>Digital Visiting Cards</h3>
-                    </div>
-                    <div class="feature-card">
-                        <h3>Site Progress Photo/Video Upload</h3>
-                    </div>
-                    <div class="feature-card">
-                        <h3>Real-time Task Management</h3>
-                    </div>
-                    <div class="feature-card">
-                        <h3>Instant Communication via WhatsApp/Telegram</h3>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- CTA Section -->
-        <section class="cta">
-            <div class="container">
-                <h2>Ready to Transform Your Business?</h2>
-                <p>Join thousands of electrical service providers who trust Pramukhraj for their business management needs.</p>
-                <a href="#" class="btn btn-outline">Start Free Trial</a>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <div class="container">
-            <p>&copy; <span id="year"></span> Pramukhraj Electricals. All rights reserved.</p>
+  <header>
+    <nav class="container" aria-label="Primary Navigation">
+      <a href="index.html" class="logo">
+        <img src="assets/logo.png" alt="Pramukhraj Electricals Logo">
+      </a>
+      <!-- Standard navigation links (desktop) -->
+      <ul class="nav-links">
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#testimonials">Testimonials</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <!-- Hamburger menu icon for mobile -->
+      <div class="menu-icon">
+        <input class="menu-icon__checkbox" type="checkbox" id="menu-toggle" aria-label="Toggle Menu" />
+        <div>
+          <span></span>
+          <span></span>
         </div>
-    </footer>
+      </div>
+      <!-- Mobile navigation menu (dropdown) -->
+      <ul class="mobile-menu" id="mobileMenu">
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#testimonials">Testimonials</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
 
-    <script>
-        // Update copyright year
-        document.getElementById('year').textContent = new Date().getFullYear();
+  <main>
+    <!-- Hero Section -->
+    <section class="hero animate" id="hero">
+      <div class="container">
+        <h1>Pramukhraj Electricals</h1>
+        <p>Streamline your electrical services business with our comprehensive management solution</p>
+        <div class="button-group">
+          <a href="signup.html" class="btn btn-primary">Get Started</a>
+          <a href="login.html" class="btn btn-outline">Sign In</a>
+        </div>
+      </div>
+    </section>
 
-        // Smooth scroll for navigation
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
+    <!-- Features Section -->
+    <section id="features" class="features animate">
+      <div class="container">
+        <h2>Powerful Features for Your Business</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <h3><i class="fas fa-clock"></i> Staff Attendance Tracking</h3>
+            <p>Monitor and manage attendance across multiple sites in real time.</p>
+          </div>
+          <div class="feature-card">
+            <h3><i class="fas fa-money-bill-wave"></i> Financial Management</h3>
+            <p>Keep track of invoices, payments, and overall financial health seamlessly.</p>
+          </div>
+          <div class="feature-card">
+            <h3><i class="fas fa-id-card"></i> Digital Visiting Cards</h3>
+            <p>Create and share professional digital cards with ease.</p>
+          </div>
+          <div class="feature-card">
+            <h3><i class="fas fa-camera"></i> Progress Photo/Video Upload</h3>
+            <p>Document and share on-site progress in real time with your team and clients.</p>
+          </div>
+          <div class="feature-card">
+            <h3><i class="fas fa-tasks"></i> Real-time Task Management</h3>
+            <p>Assign, track, and complete tasks efficiently with our intuitive dashboard.</p>
+          </div>
+          <div class="feature-card">
+            <h3><i class="fas fa-comments"></i> Instant Communication</h3>
+            <p>Connect instantly with your team via integrated messaging solutions.</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-        // Add scroll animation for feature cards
-        const cards = document.querySelectorAll('.feature-card');
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="testimonials animate">
+      <div class="container">
+        <h2>What Our Clients Say</h2>
+        <div class="features-grid">
+          <div class="testimonial-item">
+            <p>"Pramukhraj Electricals has revolutionized the way we manage our projects. The system is intuitive and reliable."</p>
+            <span>- Rajesh K.</span>
+          </div>
+          <div class="testimonial-item">
+            <p>"The digital visiting cards and real-time communication features have strengthened our client relationships."</p>
+            <span>- Anita S.</span>
+          </div>
+          <div class="testimonial-item">
+            <p>"A complete solution for our business needs, from financial tracking to on-site updates. Highly recommended!"</p>
+            <span>- Mohan P.</span>
+          </div>
+        </div>
+      </div>
+    </section>
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing animate">
+      <div class="container">
+        <h2>Pricing Plans</h2>
+        <div class="pricing-cards">
+          <div class="pricing-card">
+            <h3>Basic</h3>
+            <p>₹99/month</p>
+            <ul>
+              <li>Upto 5 Staff </li>
+              <li>Attendance Tracking</li>
+              <li>Financials Services</li>
+              <li>5GB Storage</li>
+            </ul>
+            <a href="signup.html" class="btn btn-primary">Choose Plan</a>
+          </div>
+          <div class="pricing-card">
+            <h3>Professional</h3>
+            <p>₹199/month</p>
+            <ul>
+              <li>Upto 10 Staff </li>
+              <li>Attendance Tracking</li>
+              <li>Financials Services</li>
+              <li>15GB Storage</li>
+              <li>Task Management</li>
+              <li>Advanced Reporting</li>
+              <li>Priority Support</li>
+            </ul>
+            <a href="signup.html" class="btn btn-primary">Choose Plan</a>
+          </div>
+          <div class="pricing-card">
+            <h3>Enterprise</h3>
+            <p>Contact Us</p>
+            <ul>
+              <li>Custom Solutions</li>
+              <li>Dedicated Support</li>
+              <li>Integration Assistance</li>
+            </ul>
+            <a href="contact.html" class="btn btn-primary">Contact Sales</a>
+          </div>
+        </div>
+      </div>
+    </section>
 
-        cards.forEach(card => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(20px)';
-            card.style.transition = 'all 0.6s ease-out';
-            observer.observe(card);
-        });
-    </script>
+    <!-- Contact Section -->
+    <section id="contact" class="contact animate">
+      <div class="container">
+        <h2>Get In Touch</h2>
+        <p>Have any questions? We'd love to hear from you!</p>
+        <form action="contact_process.php" method="POST">
+          <div class="form-group">
+            <label for="name">Your Name</label>
+            <input type="text" id="name" name="name" placeholder="Enter your name" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Your Email</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+          </div>
+          <div class="form-group">
+            <label for="message">Your Message</label>
+            <textarea id="message" name="message" rows="5" placeholder="Enter your message" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Send Message</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>© <span id="year"></span> Pramukhraj Electricals. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Update copyright year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Intersection Observer for scroll animations
+    const sections = document.querySelectorAll('.animate');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+    sections.forEach(section => observer.observe(section));
+
+    // Toggle mobile menu when hamburger is clicked
+    const menuCheckbox = document.querySelector('.menu-icon__checkbox');
+    const mobileMenu = document.getElementById('mobileMenu');
+    menuCheckbox.addEventListener('change', () => {
+      mobileMenu.style.display = menuCheckbox.checked ? 'block' : 'none';
+    });
+    // Hide mobile menu when a mobile link is clicked
+    document.querySelectorAll('.mobile-menu a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.style.display = 'none';
+        menuCheckbox.checked = false;
+      });
+    });
+  </script>
 </body>
 </html>
